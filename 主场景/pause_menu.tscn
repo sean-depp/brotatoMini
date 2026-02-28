@@ -1,0 +1,98 @@
+[gd_scene load_steps=3 format=3 uid="uid://br7bofi1vl21u"]
+
+[ext_resource type="FontFile" uid="uid://bqyc44cmgmvaq" path="res://资源/fonts/Xolonium-Regular.ttf" id="1_8nm0t"]
+[ext_resource type="Script" uid="uid://bkq52m6oiexts" path="res://脚本/pause_menu.gd" id="1_hax5v"]
+
+[node name="PauseMenu" type="CanvasLayer"]
+layer = 10
+script = ExtResource("1_hax5v")
+
+[node name="Grid" type="GridContainer" parent="."]
+anchors_preset = 7
+anchor_left = 0.5
+anchor_top = 1.0
+anchor_right = 0.5
+anchor_bottom = 1.0
+offset_left = -400.0
+offset_top = -140.0
+offset_right = 400.0
+grow_horizontal = 2
+grow_vertical = 0
+columns = 4
+
+[node name="WeaponVBox" type="VBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="WeaponValue" type="Label" parent="Grid/WeaponVBox"]
+custom_minimum_size = Vector2(160, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "武器: 1"
+horizontal_alignment = 1
+
+[node name="WeaponButton" type="Button" parent="Grid/WeaponVBox"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 64
+text = "增加武器"
+
+[node name="RangeVBox" type="VBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="RangeValue" type="Label" parent="Grid/RangeVBox"]
+custom_minimum_size = Vector2(160, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "射程: 0"
+horizontal_alignment = 1
+
+[node name="RangeButton" type="Button" parent="Grid/RangeVBox"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 64
+text = "增加射程"
+
+[node name="HPVBox" type="VBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="HPValue" type="Label" parent="Grid/HPVBox"]
+custom_minimum_size = Vector2(160, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "生命上限: 0"
+horizontal_alignment = 1
+
+[node name="BuyButton" type="Button" parent="Grid/HPVBox"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 64
+text = "增加血量"
+
+[node name="FireVBox" type="VBoxContainer" parent="Grid"]
+layout_mode = 2
+
+[node name="FireValue" type="Label" parent="Grid/FireVBox"]
+custom_minimum_size = Vector2(160, 24)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "攻速: 0.00s"
+horizontal_alignment = 1
+
+[node name="FireRateButton" type="Button" parent="Grid/FireVBox"]
+custom_minimum_size = Vector2(160, 64)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 64
+text = "增加攻速"
+
+[connection signal="pressed" from="Grid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
+[connection signal="pressed" from="Grid/RangeVBox/RangeButton" to="." method="_on_range_button_pressed"]
+[connection signal="pressed" from="Grid/HPVBox/BuyButton" to="." method="_on_buy_button_pressed"]
+[connection signal="pressed" from="Grid/FireVBox/FireRateButton" to="." method="_on_fire_rate_button_pressed"]

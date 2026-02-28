@@ -1,0 +1,23 @@
+[gd_scene load_steps=4 format=3 uid="uid://cje3lx34jcfk4"]
+
+[ext_resource type="Script" uid="uid://bsl30wowm65qk" path="res://脚本/mob_bullet.gd" id="1_tavtp"]
+[ext_resource type="Texture2D" uid="uid://rstmesjceuvf" path="res://资源/art/bubble/bubble.png" id="2_tavtp"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_iyb2e"]
+radius = 16.0
+
+[node name="MobBullet" type="Area2D"]
+script = ExtResource("1_tavtp")
+
+[node name="Sprite2D" type="Sprite2D" parent="."]
+position = Vector2(-1, -1)
+scale = Vector2(1.41578, 1.40358)
+texture = ExtResource("2_tavtp")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+position = Vector2(-1, -1)
+shape = SubResource("CircleShape2D_iyb2e")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+position = Vector2(-0.999999, -0.999999)
+scale = Vector2(1.6, 1.6)

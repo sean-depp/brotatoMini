@@ -1,0 +1,12 @@
+[gd_scene load_steps=3 format=3 uid="uid://nmk1mavjevho"]
+
+[ext_resource type="Script" uid="uid://bpo8n78cmleos" path="res://脚本/mob_weapon.gd" id="1_apv4n"]
+[ext_resource type="PackedScene" uid="uid://cje3lx34jcfk4" path="res://子弹/mob_bullet.tscn" id="2_apv4n"]
+
+[node name="MobWeapon" type="Node2D"]
+script = ExtResource("1_apv4n")
+bullet_scene = ExtResource("2_apv4n")
+
+[node name="ShootTimer" type="Timer" parent="."]
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]
