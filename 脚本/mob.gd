@@ -90,13 +90,37 @@ func change_direction():
 	# 2. 用相同的增量旋转速度向量（关键：使用增量而非绝对角度）
 	linear_velocity = linear_velocity.rotated(direction_delta)
 	
+func _physics_process(_delta: float) -> void:
+	# 持续检查地图边界（2560x1440）
+	const MAP_WIDTH = 2560.0
+	const MAP_HEIGHT = 1440.0
+	const MARGIN = 50.0  # 边界边距，避免怪物完全贴边
+	
+	# 如果怪物超出地图边界，强制改变方向并夹回范围内
+	var needs_correction = false
+	
+	if global_position.x < MARGIN:
+		linear_velocity.x = abs(linear_velocity.x)  # 向右移动
+		global_position.x = MARGIN
+		needs_correction = true
+	elif global_position.x > MAP_WIDTH - MARGIN:
+		linear_velocity.x = -abs(linear_velocity.x)  # 向左移动
+		global_position.x = MAP_WIDTH - MARGIN
+		needs_correction = true
+	
+	if global_position.y < MARGIN:
+		linear_velocity.y = abs(linear_velocity.y)  # 向下移动
+		global_position.y = MARGIN
+		needs_correction = true
+	elif global_position.y > MAP_HEIGHT - MARGIN:
+		linear_velocity.y = -abs(linear_velocity.y)  # 向上移动
+		global_position.y = MAP_HEIGHT - MARGIN
+		needs_correction = true
+
+
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:
-	# 离开屏幕后不销毁，改为折返：翻转速度向量并旋转节点180度
-	# 这样带远程武器的mob3仍按原速折返，其他类型也按各自速度折返
-	linear_velocity = -linear_velocity
-	rotation += PI
-	# 微微将位置向内移动，避免重复触发离屏事件
-	global_position += linear_velocity.normalized() * 8
+	# 此函数已由 _physics_process() 中的边界检查代替，但保留以防向后兼容
+	pass
 
 
 func _on_change_timer_timeout() -> void:

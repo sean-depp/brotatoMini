@@ -18,6 +18,17 @@ var mob_spawn_count := {
 
 func _ready() -> void:
 	$HUD.pause_toggle_requested.connect(_on_pause_toggle_requested)
+	
+	# 设置相机跟踪玩家
+	_setup_camera()
+	
+	# 初始化：玩家和相机都放在 StartPos，避免初始时显示灰色区域
+	$Player.start($StartPos.position)
+	if has_node("Camera2D"):
+		get_node("Camera2D").global_position = $StartPos.position
+	
+	# 绘制地图边界
+	_draw_map_boundary()
 
 func _on_pause_toggle_requested():
 	if not running:
@@ -84,6 +95,73 @@ func add_score(amount: int = 1) -> void:
 func is_running() -> bool:
 	return running
 
+func _process(_delta: float) -> void:
+	# 实时跟踪玩家位置到相机
+	if running and has_node("Camera2D") and has_node("Player"):
+		var camera = get_node("Camera2D")
+		var player = get_node("Player")
+		if camera.is_current():
+			camera.global_position = player.global_position
+
+func _setup_camera() -> void:
+	# 检查是否已存在 Camera2D
+	if has_node("Camera2D"):
+		return
+	
+	# 创建 Camera2D
+	var camera = Camera2D.new()
+	camera.name = "Camera2D"
+	add_child(camera)
+	
+	# 配置相机
+	camera.enabled = true
+	camera.make_current()
+	camera.zoom = Vector2(1.0, 1.0)
+	
+	# 启用平滑跟踪，改善移动手感
+	camera.position_smoothing_enabled = true
+	camera.position_smoothing_speed = 8.0
+
+func _create_background_overlay() -> void:
+	# 创建一个 CanvasLayer 来显示背景（在 HUD 下面）
+	if has_node("BackgroundLayer"):
+		return
+	
+	var bg_layer = CanvasLayer.new()
+	bg_layer.name = "BackgroundLayer"
+	bg_layer.layer = -1  # 在所有东西下面
+	add_child(bg_layer)
+	
+	# 创建背景 ColorRect（覆盖整个游戏区域）
+	var bg_rect = ColorRect.new()
+	bg_rect.name = "BG"
+	bg_rect.color = Color(0.235294, 0.372549, 1, 1)
+	bg_rect.anchor_left = 0.0
+	bg_rect.anchor_top = 0.0
+	bg_rect.anchor_right = 1.0
+	bg_rect.anchor_bottom = 1.0
+	bg_layer.add_child(bg_rect)
+
+func _draw_map_boundary() -> void:
+	# 如果边界已存在，删除旧的
+	if has_node("MapBoundary"):
+		get_node("MapBoundary").queue_free()
+	
+	# 创建地图边界线
+	var boundary = Line2D.new()
+	boundary.name = "MapBoundary"
+	boundary.width = 2.0
+	boundary.default_color = Color.WHITE
+	boundary.closed = true
+	
+	# 绘制矩形边界 (0,0)-(2560,1440)
+	boundary.add_point(Vector2(0, 0))
+	boundary.add_point(Vector2(2560, 0))
+	boundary.add_point(Vector2(2560, 1440))
+	boundary.add_point(Vector2(0, 1440))
+	
+	add_child(boundary)
+
 func new_game():
 	# 通过start_game信号启动新游戏
 	running = true
@@ -99,6 +177,7 @@ func new_game():
 	$HUD.set_full_health()
 
 	$Player.start($StartPos.position)
+	
 	#$StartTimer.start()
 	
 	$HUD.update_score(score)
@@ -123,21 +202,16 @@ func _on_mob_timer_timeout() -> void:
 		# Create a new instance of the Mob scene.
 		var mob = mob_scene.instantiate()
 
-		# Choose a random location on Path2D.
-		var mob_spawn_location = $MobPath/MobSpawnLocation
+		# 在地图范围内随机生成怪物位置（直接在范围内，不在边界外）
+		var spawn_pos = Vector2(
+			randf_range(100, 2460),  # x: 100 到 2460（避免边界）
+			randf_range(100, 1340)   # y: 100 到 1340（避免边界）
+		)
 		
-		# 随机起始位置
-		mob_spawn_location.progress_ratio = randf()
+		mob.global_position = spawn_pos
 
-		# Set the mob's position to the random location.
-		mob.position = mob_spawn_location.position
-
-		# Set the mob's direction perpendicular to the path direction.
-		# 沿着法线往里移动
-		var direction = mob_spawn_location.rotation + PI / 2
-
-		# Add some randomness to the direction.
-		direction += randf_range(-PI / 4, PI / 4)
+		# 随机方向
+		var direction = randf_range(0, TAU)
 		mob.rotation = direction
 
 		# Choose the velocity for the mob.

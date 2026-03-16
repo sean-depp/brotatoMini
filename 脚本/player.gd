@@ -20,7 +20,8 @@ var weapons: Array = []
 var weapon_scene = preload("res://武器/weapon.tscn")
 
 func _ready() -> void:
-	screen_size = get_viewport_rect().size
+	# 地图大小 2560x1440（2K）
+	screen_size = Vector2(2560, 1440)
 	add_weapon()
 	
 	hide()
