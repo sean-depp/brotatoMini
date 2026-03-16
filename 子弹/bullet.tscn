@@ -1,7 +1,8 @@
-[gd_scene load_steps=5 format=3 uid="uid://cy4av8mpaxv8g"]
+[gd_scene load_steps=6 format=3 uid="uid://cy4av8mpaxv8g"]
 
 [ext_resource type="Script" uid="uid://dwl4e6by2ffyt" path="res://脚本/bullet.gd" id="1_bullet"]
 [ext_resource type="PackedScene" uid="uid://dpyxi7ih1qq4p" path="res://子弹/drop_item.tscn" id="2_or41t"]
+[ext_resource type="PackedScene" uid="uid://bxhbcrvt3skiq" path="res://子弹/drop_magnet.tscn" id="3_666vn"]
 [ext_resource type="Texture2D" uid="uid://bq2x2fwhcaunc" path="res://资源/art/Laser Sprites/02.png" id="3_or41t"]
 
 [sub_resource type="CapsuleShape2D" id="CapsuleShape2D_666vn"]
@@ -11,6 +12,7 @@ height = 22.0
 [node name="Bullet" type="Area2D"]
 script = ExtResource("1_bullet")
 drop_item_scene = ExtResource("2_or41t")
+drop_magnet_scene = ExtResource("3_666vn")
 
 [node name="Sprite2D" type="Sprite2D" parent="."]
 scale = Vector2(0.8, 0.8)

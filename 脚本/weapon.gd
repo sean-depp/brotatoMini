@@ -78,6 +78,9 @@ func shoot(target_pos: Variant = null) -> void:
 	if has_node("ShootTimer"):
 		$ShootTimer.start()
 
+	# 射击完成后将握把恢复到初始方向（只在有目标的情况下旋转过）
+	# （已移除，避免立即重设覆盖旋转）
+
 # 射击冷却计时器超时处理
 func _on_shoot_timer_timeout():
 	can_shoot = true

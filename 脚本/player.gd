@@ -7,7 +7,15 @@ var screen_size # Size of the game window.
 
 # 武器系统：同时挂载多把枪（最多 `max_weapons`）
 @export var max_weapons: int = 6
-@export var weapon_offsets := [Vector2(40, -4), Vector2(-40, -4), Vector2(0, -24), Vector2(24, 24), Vector2(-24, 24), Vector2(0, 40)]
+# 左右各三点，依次从上到下右侧再左侧
+@export var weapon_offsets := [
+	Vector2(40, -16),
+	Vector2(40, 0),
+	Vector2(40, 16),
+	Vector2(-40, -16),
+	Vector2(-40, 0),
+	Vector2(-40, 16)
+]
 var weapons: Array = []
 var weapon_scene = preload("res://武器/weapon.tscn")
 
