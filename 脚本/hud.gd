@@ -28,14 +28,12 @@ func hide_message():
 	$Message.hide()
 	
 func show_game_over():
-	show_message("游戏结束")
-	# Wait until the MessageTimer has counted down.
-	await $MessageTimer.timeout
+	$Message.text = "游戏结束"
+	$Message.show()
+	await get_tree().create_timer(2.0).timeout
 	
 	$Message.text = "躲避怪物！ESC进入商店！"
 	$Message.show()
-	# Make a one-shot timer and wait for it to finish.
-	#await get_tree().create_timer(1.0).timeout
 	$StartButton.show()
 	
 func update_score(score):

@@ -11,6 +11,7 @@ func _ready():
 	connect("body_entered", Callable(self, "_on_body_entered"))
 	# 连接area_entered信号，用于检测与玩家(Area2D)的碰撞
 	connect("area_entered", Callable(self, "_on_area_entered"))
+	add_to_group("mob_bullets")
 
 func _physics_process(delta):
 	# 根据方向和速度移动子弹

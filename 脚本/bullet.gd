@@ -31,20 +31,24 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 func _on_body_entered(body):
 	# 如果碰到的是怪物，先掉落物品，再销毁怪物和子弹
 	if body.is_in_group("mobs"):
-		# 50% 概率掉落金币或吸磊道具
-		var should_spawn_magnet = randf() < 0.1
-		
-		if should_spawn_magnet and drop_magnet_scene != null:
-			# 50% 概率：掉落吸磊道具
-			var magnet = drop_magnet_scene.instantiate()
-			magnet.global_position = body.global_position
-			# 不将吸磊道具加入 drops 组，仅追述需要被吸收的金币
-			get_tree().get_root().add_child(magnet)
-		elif drop_item_scene != null:
-			# 50% 概率：掉落金币
-			var drop_item = drop_item_scene.instantiate()
-			drop_item.global_position = body.global_position
-			call_deferred("_spawn_drop_item", drop_item)
+		# 检查是否已经掉落过物品，避免重复
+		if not body.has_meta("dropped"):
+			body.set_meta("dropped", true)
+			# 50% 概率掉落金币或吸磊道具
+			var should_spawn_magnet = randf() < 0.1
+			
+			if should_spawn_magnet and drop_magnet_scene != null:
+				# 50% 概率：掉落吸磊道具
+				var magnet = drop_magnet_scene.instantiate()
+				magnet.global_position = body.global_position
+				# 不将吸磊道具加入 drops 组，仅追述需要被吸收的金币
+				magnet.add_to_group("magnets")
+				get_tree().get_current_scene().call_deferred("add_child", magnet)
+			elif drop_item_scene != null:
+				# 50% 概率：掉落金币
+				var drop_item = drop_item_scene.instantiate()
+				drop_item.global_position = body.global_position
+				call_deferred("_spawn_drop_item", drop_item)
 
 		# 然后销毁怪物和子弹
 		body.queue_free()

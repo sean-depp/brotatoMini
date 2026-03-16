@@ -1,14 +1,12 @@
 extends Area2D
 
-# todo 提供金币全吸附的道具掉落
-
 func _ready():
 	# 连接与玩家的碰撞信号（Area2D 之间的碰撞使用 area_entered）
 	connect("area_entered", Callable(self, "_on_area_entered"))
 	
 func _on_area_entered(area):
 	# 检查碰撞对象是否为玩家
-	if area.is_in_group("player"):
+	if area.is_in_group("player") and not has_meta("animating"):
 		# 触发增加金币数：通过主场景的 add_score 方法统一处理
 		var main = get_tree().get_current_scene()
 		if main and main.has_method("add_score"):

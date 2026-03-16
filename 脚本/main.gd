@@ -90,6 +90,8 @@ func new_game():
 	# 清理场景中残留的怪物和掉落物
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("drops", "queue_free")
+	get_tree().call_group("magnets", "queue_free")
+	get_tree().call_group("mob_bullets", "queue_free")
 	
 	score = 20
 	
@@ -101,6 +103,7 @@ func new_game():
 	
 	$HUD.update_score(score)
 	$HUD.hide_message()
+	$HUD.get_node("MessageTimer").stop()
 	#$HUD.show_message("准备完成")
 	
 	$Music.play()
