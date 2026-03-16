@@ -22,6 +22,7 @@ func _on_area_entered(area):
 				# 开始吸附动画到玩家位置
 				item.set_meta("animating", true)
 				var tween = item.create_tween()
+				# 从当前位置移动到玩家位置，持续0.5秒
 				tween.tween_property(item, "global_position", area.global_position, 0.5)
 				tween.tween_callback(item.queue_free)
 		
