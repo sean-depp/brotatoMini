@@ -95,13 +95,35 @@ func add_score(amount: int = 1) -> void:
 func is_running() -> bool:
 	return running
 
+# func _process(_delta: float) -> void:
+# 	# 实时跟踪玩家位置到相机
+# 	if running and has_node("Camera2D") and has_node("Player"):
+# 		var camera = get_node("Camera2D")
+# 		var player = get_node("Player")
+# 		if camera.is_current():
+# 			camera.global_position = player.global_position
+
 func _process(_delta: float) -> void:
-	# 实时跟踪玩家位置到相机
+	# 实时跟踪玩家位置到相机，但限制在地图边界内
 	if running and has_node("Camera2D") and has_node("Player"):
 		var camera = get_node("Camera2D")
 		var player = get_node("Player")
 		if camera.is_current():
-			camera.global_position = player.global_position
+			# 计算相机应该跟随的目标位置
+			var target_pos = player.global_position
+			
+			# 地图边界 (0,0) 到 (2560,1440)
+			# 考虑相机视口大小，确保相机不会超出地图边界
+			var viewport_size = get_viewport().size
+			var half_viewport_x = viewport_size.x / 2
+			var half_viewport_y = viewport_size.y / 2
+		
+			# 限制相机位置，确保不会超出地图边界
+			target_pos.x = clamp(target_pos.x, half_viewport_x, 2560 - half_viewport_x)
+			target_pos.y = clamp(target_pos.y, half_viewport_y, 1440 - half_viewport_y)
+		
+			# 设置相机位置
+			camera.global_position = target_pos
 
 func _setup_camera() -> void:
 	# 检查是否已存在 Camera2D

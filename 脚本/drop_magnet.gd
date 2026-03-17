@@ -30,7 +30,7 @@ func _on_area_entered(area):
 		var main = get_tree().get_current_scene()
 		if main and main.has_method("add_score"):
 			main.add_score(collected_count)
-			print("Collected ", collected_count, " coins with magnet!")
+			# print("Collected ", collected_count, " coins with magnet!")
 		else:
 			# 回退方案
 			if main:

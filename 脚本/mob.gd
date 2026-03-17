@@ -97,25 +97,19 @@ func _physics_process(_delta: float) -> void:
 	const MARGIN = 50.0  # 边界边距，避免怪物完全贴边
 	
 	# 如果怪物超出地图边界，强制改变方向并夹回范围内
-	var needs_correction = false
-	
 	if global_position.x < MARGIN:
 		linear_velocity.x = abs(linear_velocity.x)  # 向右移动
 		global_position.x = MARGIN
-		needs_correction = true
 	elif global_position.x > MAP_WIDTH - MARGIN:
 		linear_velocity.x = -abs(linear_velocity.x)  # 向左移动
 		global_position.x = MAP_WIDTH - MARGIN
-		needs_correction = true
 	
 	if global_position.y < MARGIN:
 		linear_velocity.y = abs(linear_velocity.y)  # 向下移动
 		global_position.y = MARGIN
-		needs_correction = true
 	elif global_position.y > MAP_HEIGHT - MARGIN:
 		linear_velocity.y = -abs(linear_velocity.y)  # 向上移动
 		global_position.y = MAP_HEIGHT - MARGIN
-		needs_correction = true
 
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:

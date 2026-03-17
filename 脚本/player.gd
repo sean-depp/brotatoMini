@@ -47,7 +47,12 @@ func _physics_process(delta: float) -> void:
 		$AnimatedSprite2D.stop()
 
 	position += velocity * delta
-	position = position.clamp(Vector2.ZERO, screen_size)
+	# 确保玩家不会离开屏幕边界（地图边界），考虑玩家角色大小避免半个身子超出边界
+	# 假设玩家角色大小约为32x32像素，留出16像素的边距
+	var margin = 16.0
+	var min_pos = Vector2(margin, margin)
+	var max_pos = Vector2(screen_size.x - margin, screen_size.y - margin)
+	position = position.clamp(min_pos, max_pos)
 
 	if velocity.x != 0:
 		$AnimatedSprite2D.animation = "walk"
