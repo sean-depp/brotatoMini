@@ -83,5 +83,4 @@ func show_pause_panel(isshow: bool) -> void:
 				pm.update_value_labels()
 		$PauseMenu.show()
 	else:
-		# $PauseLabel.hide()
 		$PauseMenu.hide()

@@ -30,6 +30,8 @@ var health_bar: Control
 var health_bar_fill: ColorRect
 var health_bar_bg: ColorRect
 
+var is_dead: bool = false
+
 func _ready():
 	mob_visuals = [
 		get_node("mob1/AnimatedSprite2D_1"),
@@ -181,30 +183,31 @@ func take_damage(amount: int) -> void:
 
 # 怪物死亡函数
 func die() -> void:
-	# 禁用碰撞，防止继续造成伤害
+	if is_dead:
+		return  # 防止重复调用
+	is_dead = true
+	
+	# 使用 call_deferred 禁用碰撞，防止在物理查询刷新期间修改状态
 	for collision in mob_collisions:
-		collision.disabled = true
+		collision.call_deferred("set_disabled", true)
 	
 	# 停止移动
 	linear_velocity = Vector2.ZERO
 	
 	# 掉落物品
 	_spawn_drop_item()
-	
-	# 播放死亡动画（如果有）
-	if mob_visuals[mob_type_index].sprite_frames.has_animation("death"):
-		mob_visuals[mob_type_index].animation = "death"
-		mob_visuals[mob_type_index].play()
-		
-		# 等待动画播放完成后删除怪物
-		await mob_visuals[mob_type_index].animation_finished
-	else:
-		# 如果没有死亡动画，直接删除
-		pass
-	
-	# 删除怪物
-	queue_free()
 
+	var sprite_anim = mob_visuals[mob_type_index]
+	if sprite_anim.sprite_frames.has_animation("death"):
+		sprite_anim.animation = "death"
+		sprite_anim.play()
+		# 等待动画完成再删除怪物
+		await sprite_anim.animation_finished
+		queue_free()
+	else:
+		# 没有动画直接删除
+		queue_free()
+		
 # 掉落物品函数
 func _spawn_drop_item() -> void:
 	# 10% 概率掉落吸磁道具

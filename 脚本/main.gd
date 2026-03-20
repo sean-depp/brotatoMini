@@ -7,6 +7,7 @@ var cur_level = 1
 var speed_min = 150
 var speed_max = 250
 var running = false
+var game_over_called = false  # 防止重复调用game_over
 
 # 怪物类型批量生成配置（怪物类型索引 -> 生成数量）
 var mob_spawn_count := {
@@ -43,14 +44,19 @@ func pause_game():
 	$HUD.show_pause_panel(true)
 
 func resume_game():
-	$HUD.show_pause_panel(false)
 	get_tree().paused = false
+	$HUD.show_pause_panel(false)
 
 func game_over():
+	# 防止重复调用game_over
+	if game_over_called:
+		return
+	
 	$HUD.update_health_bar(-1)
 
 	# 检测血量，只有为0才是game over
 	if $HUD.get_health() <= 0:
+		game_over_called = true  # 标记game_over已调用
 		running = false
 		$Player.hide()
 		
@@ -186,6 +192,8 @@ func _draw_map_boundary() -> void:
 func new_game():
 	# 通过start_game信号启动新游戏
 	running = true
+	game_over_called = false  # 重置game_over标志
+	
 	# 清理场景中残留的怪物和掉落物
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("drops", "queue_free")
