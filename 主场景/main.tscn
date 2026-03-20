@@ -1,7 +1,8 @@
-[gd_scene load_steps=9 format=4 uid="uid://s6mgji1611g"]
+[gd_scene format=4 uid="uid://s6mgji1611g"]
 
 [ext_resource type="Script" uid="uid://dhdv52afbh3mv" path="res://脚本/main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://id3ft7dcv3bd" path="res://怪物/mob.tscn" id="2_1bvp3"]
+[ext_resource type="Texture2D" uid="uid://rstmesjceuvf" path="res://资源/art/bubble/bubble.png" id="3_f3o5p"]
 [ext_resource type="PackedScene" uid="uid://up88s1g47l8t" path="res://玩家/player.tscn" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://bty13utpjcjwj" path="res://主场景/hud.tscn" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://jj6p44i18yy0" path="res://资源/art/gameover.wav" id="5_lquwl"]
@@ -13,6 +14,14 @@ sampling_rate = 44100.0
 
 [sub_resource type="AudioStreamOggVorbis" id="AudioStreamOggVorbis_7mycd"]
 packet_sequence = SubResource("OggPacketSequence_5dsjp")
+tags = {
+"artist": "HorrorPen",
+"comment": "",
+"contact": "",
+"encoder": "FL Studio",
+"genre": "",
+"title": "House In a Forest Loop"
+}
 loop = true
 
 [sub_resource type="Curve2D" id="Curve2D_7xk8f"]
@@ -21,45 +30,44 @@ _data = {
 }
 point_count = 5
 
-[node name="Main" type="Node"]
+[node name="Main" type="Node" unique_id=660145988]
 script = ExtResource("1_h2yge")
 mob_scene = ExtResource("2_1bvp3")
+spawn_marker_texture = ExtResource("3_f3o5p")
 
-[node name="Background" type="ColorRect" parent="."]
-offset_left = 0.0
-offset_top = 0.0
+[node name="Background" type="ColorRect" parent="." unique_id=1017213551]
+z_index = -1
 offset_right = 2560.0
 offset_bottom = 1440.0
 color = Color(0.235294, 0.372549, 1, 1)
-z_index = -1
 
-[node name="Player" parent="." instance=ExtResource("3_lquwl")]
+[node name="Player" parent="." unique_id=1708377610 instance=ExtResource("3_lquwl")]
 visible = false
 
-[node name="MobTimer" type="Timer" parent="."]
+[node name="MobTimer" type="Timer" parent="." unique_id=1600267064]
 
-[node name="ScoreTimer" type="Timer" parent="."]
+[node name="ScoreTimer" type="Timer" parent="." unique_id=108237259]
 wait_time = 0.5
 
-[node name="StartTimer" type="Timer" parent="."]
+[node name="StartTimer" type="Timer" parent="." unique_id=1290686155]
 wait_time = 2.0
 one_shot = true
 
-[node name="StartPos" type="Marker2D" parent="."]
+[node name="StartPos" type="Marker2D" parent="." unique_id=1752756380]
 position = Vector2(1280, 720)
 
-[node name="HUD" parent="." instance=ExtResource("4_1bvp3")]
+[node name="HUD" parent="." unique_id=849439978 instance=ExtResource("4_1bvp3")]
 
-[node name="Music" type="AudioStreamPlayer2D" parent="."]
+[node name="Music" type="AudioStreamPlayer2D" parent="." unique_id=890686791]
 stream = SubResource("AudioStreamOggVorbis_7mycd")
 
-[node name="DeathSound" type="AudioStreamPlayer2D" parent="."]
+[node name="DeathSound" type="AudioStreamPlayer2D" parent="." unique_id=92463845]
 stream = ExtResource("5_lquwl")
 
-[node name="MobPath" type="Path2D" parent="."]
+[node name="MobPath" type="Path2D" parent="." unique_id=265630669]
 curve = SubResource("Curve2D_7xk8f")
 
-[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath"]
+[node name="MobSpawnLocation" type="PathFollow2D" parent="MobPath" unique_id=1151459222]
 
 [connection signal="hit" from="Player" to="." method="game_over"]
 [connection signal="timeout" from="MobTimer" to="." method="_on_mob_timer_timeout"]

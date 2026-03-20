@@ -1,6 +1,7 @@
 extends Node
 
 @export var mob_scene: PackedScene
+@export var spawn_marker_texture: Texture2D  # 怪物生成标记的贴图（X）
 var score = 0
 var cur_level = 1
 var speed_min = 150
@@ -221,27 +222,71 @@ func _on_mob_timer_timeout() -> void:
 	
 	# 批量生成怪物
 	for i in range(spawn_count):
-		# Create a new instance of the Mob scene.
-		var mob = mob_scene.instantiate()
-
 		# 在地图范围内随机生成怪物位置（直接在范围内，不在边界外）
 		var spawn_pos = Vector2(
 			randf_range(100, 2460),  # x: 100 到 2460（避免边界）
 			randf_range(100, 1340)   # y: 100 到 1340（避免边界）
 		)
 		
-		mob.global_position = spawn_pos
-
 		# 随机方向
 		var direction = randf_range(0, TAU)
-		mob.rotation = direction
+		
+		# 创建视觉标记（使用Sprite2D显示贴图X）
+		var marker_visual = Sprite2D.new()
+		marker_visual.name = "MarkerVisual_%s_%s" % [mob_type, i]
+		marker_visual.add_to_group("marker_visuals")
+		
+		# 设置贴图
+		if spawn_marker_texture != null:
+			marker_visual.texture = spawn_marker_texture
+		else:
+			# 如果没有设置贴图，使用默认的红色X（通过代码绘制）
+			print("警告：未设置spawn_marker_texture，使用默认红色X")
+			# 这里可以添加备用方案，或者直接让用户设置贴图
+		
+		# 设置标记大小
+		marker_visual.scale = Vector2(2.0, 2.0)  # 可以根据需要调整大小
+		marker_visual.global_position = spawn_pos
+		add_child(marker_visual)
+		
+		# 创建定时器，2秒后生成怪物
+		var spawn_timer = Timer.new()
+		spawn_timer.name = "SpawnTimer_%s_%s" % [mob_type, i]
+		spawn_timer.wait_time = 2.0
+		spawn_timer.one_shot = true
+		add_child(spawn_timer)
+		
+		# 连接信号，传递标记引用
+		spawn_timer.timeout.connect(_on_spawn_timer_timeout.bind(spawn_pos, mob_type, direction, marker_visual, spawn_timer))
+		
+		# 启动定时器
+		spawn_timer.start()
 
-		# Choose the velocity for the mob.
-		var velocity = Vector2(randf_range(speed_min, speed_max), 0.0)
-		mob.linear_velocity = velocity.rotated(direction)
+# 生成怪物的函数
+func _on_spawn_timer_timeout(spawn_pos: Vector2, _mob_type: int, direction: float, marker_visual: Sprite2D, spawn_timer: Timer) -> void:
+	# Create a new instance of the Mob scene.
+	var mob = mob_scene.instantiate()
 
-		# Spawn the mob by adding it to the Main scene.
-		add_child(mob)
+	# 设置怪物位置
+	mob.global_position = spawn_pos
+
+	# 设置怪物方向
+	mob.rotation = direction
+
+	# Choose the velocity for the mob.
+	var velocity = Vector2(randf_range(speed_min, speed_max), 0.0)
+	mob.linear_velocity = velocity.rotated(direction)
+
+	# Spawn the mob by adding it to the Main scene.
+	add_child(mob)
+	
+	# 只删除对应的标记
+	if marker_visual != null and is_instance_valid(marker_visual):
+		marker_visual.queue_free()
+	
+	# 只删除对应的定时器
+	if spawn_timer != null and is_instance_valid(spawn_timer):
+		spawn_timer.queue_free()
 
 func _on_score_timer_timeout() -> void:
 	pass
