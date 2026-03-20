@@ -2,7 +2,7 @@
 
 [ext_resource type="Script" uid="uid://dhdv52afbh3mv" path="res://脚本/main.gd" id="1_h2yge"]
 [ext_resource type="PackedScene" uid="uid://id3ft7dcv3bd" path="res://怪物/mob.tscn" id="2_1bvp3"]
-[ext_resource type="Texture2D" uid="uid://rstmesjceuvf" path="res://资源/art/bubble/bubble.png" id="3_f3o5p"]
+[ext_resource type="Texture2D" uid="uid://cg43mqgoaucca" path="res://资源/art/circle bars/32x32/32x32 circle bar progress red.png" id="3_f3o5p"]
 [ext_resource type="PackedScene" uid="uid://up88s1g47l8t" path="res://玩家/player.tscn" id="3_lquwl"]
 [ext_resource type="PackedScene" uid="uid://bty13utpjcjwj" path="res://主场景/hud.tscn" id="4_1bvp3"]
 [ext_resource type="AudioStream" uid="uid://jj6p44i18yy0" path="res://资源/art/gameover.wav" id="5_lquwl"]

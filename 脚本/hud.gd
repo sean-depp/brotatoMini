@@ -10,7 +10,10 @@ func _ready() -> void:
 
 func _unhandled_input(event):
 	if event.is_action_pressed("菜单"):
-		pause_toggle_requested.emit()
+		# 只在游戏运行时响应ESC键
+		var main = get_tree().get_current_scene()
+		if main and main.has_method("is_running") and main.is_running():
+			pause_toggle_requested.emit()
 
 func show_message(text):
 	$Message.text = text
@@ -65,6 +68,8 @@ func _on_message_timer_timeout() -> void:
 
 func _on_start_button_pressed() -> void:
 	$StartButton.hide()
+	# 禁用开始按钮的快捷键，防止ESC键触发
+	$StartButton.shortcut = null
 
 	start_game.emit()
 

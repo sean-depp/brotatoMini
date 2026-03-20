@@ -3,6 +3,10 @@ extends RigidBody2D
 # 武器场景引用
 @export var weapon_scene: PackedScene
 
+# 掉落物品场景引用
+@export var drop_item_scene: PackedScene
+@export var drop_magnet_scene: PackedScene
+
 # 怪物视觉节点组（仅动画）
 var mob_visuals: Array[AnimatedSprite2D] = []
 
@@ -18,6 +22,13 @@ var mob_weapon_configs := {
 var player: Node2D
 # 当前怪物类型索引
 var mob_type_index: int = 0
+
+# 血量系统
+var max_health: int = 1
+var current_health: int = 1
+var health_bar: Control
+var health_bar_fill: ColorRect
+var health_bar_bg: ColorRect
 
 func _ready():
 	mob_visuals = [
@@ -38,9 +49,19 @@ func _ready():
 	# 获取玩家引用
 	player = get_tree().get_first_node_in_group("player")
 	
-	# 随机选择一个怪物类型索引
-	var random_index = randi() % mob_visuals.size()
-	mob_type_index = random_index  # 保存怪物类型索引
+	# 如果场景中没有设置掉落物品场景，直接加载
+	if drop_item_scene == null:
+		drop_item_scene = load("res://子弹/drop_item.tscn")
+	if drop_magnet_scene == null:
+		drop_magnet_scene = load("res://子弹/drop_magnet.tscn")
+	
+	# 从 main.gd 传递的 mob_type 参数中获取怪物类型索引
+	# 如果没有传递，则随机选择（向后兼容）
+	if has_meta("mob_type"):
+		mob_type_index = get_meta("mob_type")
+	else:
+		var random_index = randi() % mob_visuals.size()
+		mob_type_index = random_index
 	
 	# 隐藏所有视觉节点和碰撞形状
 	for visual in mob_visuals:
@@ -49,15 +70,18 @@ func _ready():
 		collision.disabled = true  # 禁用碰撞（而非隐藏）
 	
 	# 激活选中的怪物视觉和碰撞
-	mob_visuals[random_index].visible = true
-	mob_collisions[random_index].disabled = false
+	mob_visuals[mob_type_index].visible = true
+	mob_collisions[mob_type_index].disabled = false
 	
-	var mob_types = Array(mob_visuals[random_index].sprite_frames.get_animation_names())
-	mob_visuals[random_index].animation = mob_types.pick_random()
-	mob_visuals[random_index].play()
+	var mob_types = Array(mob_visuals[mob_type_index].sprite_frames.get_animation_names())
+	mob_visuals[mob_type_index].animation = mob_types.pick_random()
+	mob_visuals[mob_type_index].play()
 
 	# 为当前怪物类型实例化并配置武器
-	_setup_weapon(random_index)
+	_setup_weapon(mob_type_index)
+
+	# 根据怪物类型设置血量
+	_setup_health(mob_type_index)
 
 	# 设置初始速度
 	var initial_speed = 100.0
@@ -91,6 +115,45 @@ func _setup_weapon(mob_type_index: int) -> void:
 		weapon.min_fire_rate = config["min_fire_rate"]
 		weapon.max_fire_rate = config["max_fire_rate"]
 
+# 为指定的怪物类型设置血量
+func _setup_health(mob_type_index: int) -> void:
+	# 根据怪物类型设置血量
+	# mob1（索引0）和 mob2（索引1）：3血
+	# mob3（索引2）：1血
+	if mob_type_index == 0 or mob_type_index == 1:
+		max_health = 3
+	elif mob_type_index == 2:
+		max_health = 1
+	else:
+		max_health = 1  # 其他怪物默认1血
+	
+	current_health = max_health
+	
+	# 创建血条容器（Control节点）
+	health_bar = Control.new()
+	health_bar.name = "HealthBar"
+	health_bar.position = Vector2(-20, -30)  # 血条位置（怪物上方）
+	health_bar.custom_minimum_size = Vector2(40, 3)  # 血条容器大小
+	
+	# 创建血条背景（红色）
+	health_bar_bg = ColorRect.new()
+	health_bar_bg.name = "Background"
+	health_bar_bg.color = Color(0.8, 0.2, 0.2, 0.8)
+	health_bar_bg.size = Vector2(40, 3)  # 背景大小
+	health_bar_bg.position = Vector2(0, 0)
+	health_bar.add_child(health_bar_bg)
+	
+	# 创建血条前景（绿色）
+	health_bar_fill = ColorRect.new()
+	health_bar_fill.name = "Fill"
+	health_bar_fill.color = Color(0.2, 0.8, 0.2, 0.8)
+	health_bar_fill.size = Vector2(40, 4)  # 前景大小（初始为满血）
+	health_bar_fill.position = Vector2(0, 0)
+	health_bar.add_child(health_bar_fill)
+	
+	# 将血条添加到怪物节点
+	add_child(health_bar)
+
 func change_direction():
 	# 计算随机的方向变化增量（-90° 到 90° 之间）
 	var direction_delta = randf_range(-PI/2, PI/2)
@@ -100,6 +163,66 @@ func change_direction():
 	
 	# 2. 用相同的增量旋转速度向量（关键：使用增量而非绝对角度）
 	linear_velocity = linear_velocity.rotated(direction_delta)
+
+# 怪物受伤函数
+func take_damage(amount: int) -> void:
+	current_health -= amount
+	
+	# 更新血条显示
+	if health_bar_fill != null and is_instance_valid(health_bar_fill):
+		# 计算血条宽度比例
+		var health_ratio = float(current_health) / float(max_health)
+		# 更新血条前景宽度
+		health_bar_fill.size.x = 40.0 * health_ratio
+	
+	# 检查是否死亡
+	if current_health <= 0:
+		die()
+
+# 怪物死亡函数
+func die() -> void:
+	# 禁用碰撞，防止继续造成伤害
+	for collision in mob_collisions:
+		collision.disabled = true
+	
+	# 停止移动
+	linear_velocity = Vector2.ZERO
+	
+	# 掉落物品
+	_spawn_drop_item()
+	
+	# 播放死亡动画（如果有）
+	if mob_visuals[mob_type_index].sprite_frames.has_animation("death"):
+		mob_visuals[mob_type_index].animation = "death"
+		mob_visuals[mob_type_index].play()
+		
+		# 等待动画播放完成后删除怪物
+		await mob_visuals[mob_type_index].animation_finished
+	else:
+		# 如果没有死亡动画，直接删除
+		pass
+	
+	# 删除怪物
+	queue_free()
+
+# 掉落物品函数
+func _spawn_drop_item() -> void:
+	# 10% 概率掉落吸磁道具
+	var should_spawn_magnet = randf() < 0.1
+	
+	if should_spawn_magnet and drop_magnet_scene != null:
+		# 掉落吸磁道具
+		var magnet = drop_magnet_scene.instantiate()
+		magnet.global_position = global_position
+		magnet.add_to_group("magnets")
+		get_tree().get_root().call_deferred("add_child", magnet)
+	elif drop_item_scene != null:
+		# 掉落金币
+		var drop_item = drop_item_scene.instantiate()
+		drop_item.global_position = global_position
+		if not drop_item.is_in_group("drops"):
+			drop_item.add_to_group("drops")
+		get_tree().get_root().call_deferred("add_child", drop_item)
 	
 func _physics_process(_delta: float) -> void:
 	# 持续检查地图边界（2560x1440）

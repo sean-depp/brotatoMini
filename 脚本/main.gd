@@ -13,7 +13,6 @@ var mob_spawn_count := {
 	0: 1,  # mob1 生成1个
 	1: 1,  # mob2 生成1个
 	2: 1,  # mob3 生成1个
-	3: 1,  # mob4 生成1个
 }
 
 func _ready() -> void:
@@ -207,14 +206,17 @@ func new_game():
 	$HUD.get_node("MessageTimer").stop()
 	#$HUD.show_message("准备完成")
 	
+	# 隐藏开始按钮
+	$HUD.get_node("StartButton").hide()
+	
 	$Music.play()
 	
 	$MobTimer.start()
 	$ScoreTimer.start()
 	
 func _on_mob_timer_timeout() -> void:
-	# 随机选择一个怪物类型（0-3，排除mob5）
-	var mob_type = randi() % 4
+	# 随机选择一个怪物类型（0-2，排除mob4和mob5）
+	var mob_type = randi() % 3
 	
 	# 根据配置获取该怪物类型的生成数量
 	var spawn_count = mob_spawn_count.get(mob_type, 1)
@@ -265,6 +267,9 @@ func _on_mob_timer_timeout() -> void:
 func _on_spawn_timer_timeout(spawn_pos: Vector2, mob_type: int, direction: float, marker_visual: Sprite2D, spawn_timer: Timer) -> void:
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
+
+	# 设置怪物类型（通过元数据传递）
+	mob.set_meta("mob_type", mob_type)
 
 	# 设置怪物位置
 	mob.global_position = spawn_pos
