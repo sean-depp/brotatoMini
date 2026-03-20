@@ -14,6 +14,11 @@ var mob_weapon_configs := {
 	2: {"min_fire_rate": 4.0, "max_fire_rate": 8.0},  # 只有 mob3 Spookmoth 可以射击
 }
 
+# 玩家引用
+var player: Node2D
+# 当前怪物类型索引
+var mob_type_index: int = 0
+
 func _ready():
 	mob_visuals = [
 		get_node("mob1/AnimatedSprite2D_1"),
@@ -30,8 +35,12 @@ func _ready():
 		get_node("CollisionShape2D_5"),
 	]
 	
+	# 获取玩家引用
+	player = get_tree().get_first_node_in_group("player")
+	
 	# 随机选择一个怪物类型索引
 	var random_index = randi() % mob_visuals.size()
+	mob_type_index = random_index  # 保存怪物类型索引
 	
 	# 隐藏所有视觉节点和碰撞形状
 	for visual in mob_visuals:
@@ -50,9 +59,11 @@ func _ready():
 	# 为当前怪物类型实例化并配置武器
 	_setup_weapon(random_index)
 
-	# 非远程怪物（不是索引2）移动速度x3；索引2为带武器的远程怪物，保持原速
-	if random_index != 2:
-		linear_velocity *= 2
+	# 设置初始速度
+	var initial_speed = 100.0
+	var initial_direction = randf_range(0, TAU)
+	linear_velocity = Vector2(initial_speed, 0).rotated(initial_direction)
+	rotation = initial_direction
 
 	$ChangeTimer.start()
 
@@ -110,6 +121,24 @@ func _physics_process(_delta: float) -> void:
 	elif global_position.y > MAP_HEIGHT - MARGIN:
 		linear_velocity.y = -abs(linear_velocity.y)  # 向上移动
 		global_position.y = MAP_HEIGHT - MARGIN
+	
+	# 如果不是 mob3（索引2），则朝向玩家移动
+	if mob_type_index != 2 and player != null and is_instance_valid(player):
+		# 计算朝向玩家的方向
+		var direction_to_player = (player.global_position - global_position).normalized()
+		
+		# 获取当前速度大小
+		var current_speed = linear_velocity.length()
+		
+		# 如果速度为0，设置一个初始速度
+		if current_speed == 0:
+			current_speed = 100.0
+		
+		# 直接设置速度方向朝向玩家（不使用插值，避免原地旋转）
+		linear_velocity = direction_to_player * current_speed
+		
+		# 更新旋转角度以匹配移动方向
+		rotation = linear_velocity.angle()
 
 
 func _on_visible_on_screen_enabler_2d_screen_exited() -> void:

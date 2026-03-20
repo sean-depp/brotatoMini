@@ -14,7 +14,6 @@ var mob_spawn_count := {
 	1: 1,  # mob2 生成1个
 	2: 1,  # mob3 生成1个
 	3: 1,  # mob4 生成1个
-	4: 5,  # mob5 生成5个
 }
 
 func _ready() -> void:
@@ -214,8 +213,8 @@ func new_game():
 	$ScoreTimer.start()
 	
 func _on_mob_timer_timeout() -> void:
-	# 随机选择一个怪物类型（0-4）
-	var mob_type = randi() % 5
+	# 随机选择一个怪物类型（0-3，排除mob5）
+	var mob_type = randi() % 4
 	
 	# 根据配置获取该怪物类型的生成数量
 	var spawn_count = mob_spawn_count.get(mob_type, 1)
@@ -263,7 +262,7 @@ func _on_mob_timer_timeout() -> void:
 		spawn_timer.start()
 
 # 生成怪物的函数
-func _on_spawn_timer_timeout(spawn_pos: Vector2, _mob_type: int, direction: float, marker_visual: Sprite2D, spawn_timer: Timer) -> void:
+func _on_spawn_timer_timeout(spawn_pos: Vector2, mob_type: int, direction: float, marker_visual: Sprite2D, spawn_timer: Timer) -> void:
 	# Create a new instance of the Mob scene.
 	var mob = mob_scene.instantiate()
 
@@ -274,7 +273,14 @@ func _on_spawn_timer_timeout(spawn_pos: Vector2, _mob_type: int, direction: floa
 	mob.rotation = direction
 
 	# Choose the velocity for the mob.
-	var velocity = Vector2(randf_range(speed_min, speed_max), 0.0)
+	# mob3（索引2）是远程怪物，速度较慢；其他怪物速度较快（翻倍）
+	var mob_speed: float
+	if mob_type == 2:
+		mob_speed = 150.0  # mob3 速度较慢
+	else:
+		mob_speed = randf_range(speed_min * 4, speed_max * 4)  # 其他怪物速度翻倍
+	
+	var velocity = Vector2(mob_speed, 0.0)
 	mob.linear_velocity = velocity.rotated(direction)
 
 	# Spawn the mob by adding it to the Main scene.

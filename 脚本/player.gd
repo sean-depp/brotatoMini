@@ -24,6 +24,9 @@ func _ready() -> void:
 	screen_size = Vector2(2560, 1440)
 	add_weapon()
 	
+	# 将玩家添加到 "player" 组，方便怪物找到玩家
+	add_to_group("player")
+	
 	hide()
 
 func _physics_process(delta: float) -> void:
