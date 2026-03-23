@@ -12,7 +12,7 @@ var game_over_called = false  # 防止重复调用game_over
 # 怪物类型批量生成配置（怪物类型索引 -> 生成数量）
 var mob_spawn_count := {
 	0: 1,  # mob1 生成1个
-	1: 1,  # mob2 生成1个
+	1: 3,  # mob2 生成3个（一次性生成）
 	2: 1,  # mob3 生成1个
 }
 
@@ -232,13 +232,43 @@ func _on_mob_timer_timeout() -> void:
 	# 根据配置获取该怪物类型的生成数量
 	var spawn_count = mob_spawn_count.get(mob_type, 1)
 	
-	# 批量生成怪物
-	for i in range(spawn_count):
-		# 在地图范围内随机生成怪物位置（直接在范围内，不在边界外）
-		var spawn_pos = Vector2(
-			randf_range(100, 2460),  # x: 100 到 2460（避免边界）
-			randf_range(100, 1340)   # y: 100 到 1340（避免边界）
+	# 如果是mob2（类型1），先生成一个中心位置，然后生成3个附近的位置
+	var spawn_positions: Array[Vector2] = []
+	
+	if mob_type == 1:
+		# mob2：生成一个中心位置
+		var center_pos = Vector2(
+			randf_range(150, 2410),  # x: 150 到 2410（留出更多边距）
+			randf_range(150, 1290)   # y: 150 到 1290（留出更多边距）
 		)
+		
+		# 在中心位置周围生成3个附近的位置（距离50-100像素）
+		for i in range(3):
+			var offset = Vector2(
+				randf_range(-100, 100),
+				randf_range(-100, 100)
+			)
+			# 确保偏移量不为0，避免重叠
+			if offset.length() < 30:
+				offset = Vector2(50, 0)
+			
+			var spawn_pos = center_pos + offset
+			# 确保位置在地图边界内
+			spawn_pos.x = clamp(spawn_pos.x, 100, 2460)
+			spawn_pos.y = clamp(spawn_pos.y, 100, 1340)
+			spawn_positions.append(spawn_pos)
+	else:
+		# 其他怪物类型：生成独立的随机位置
+		for i in range(spawn_count):
+			var spawn_pos = Vector2(
+				randf_range(100, 2460),  # x: 100 到 2460（避免边界）
+				randf_range(100, 1340)   # y: 100 到 1340（避免边界）
+			)
+			spawn_positions.append(spawn_pos)
+	
+	# 批量生成怪物
+	for i in range(spawn_positions.size()):
+		var spawn_pos = spawn_positions[i]
 		
 		# 随机方向
 		var direction = randf_range(0, TAU)
