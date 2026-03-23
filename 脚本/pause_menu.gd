@@ -79,6 +79,9 @@ func _on_fire_rate_button_pressed() -> void:
 							found = true
 							if child.decrease_auto_shoot_interval(0.01):
 								any_upgraded = true
+							else:
+								any_upgraded = false
+
 					# 没有找到任何武器
 					if not found:
 						hud.show_message("未找到武器！")
@@ -115,6 +118,9 @@ func _on_range_button_pressed() -> void:
 							found = true
 							if child.increase_auto_shoot_range(20.0):
 								any_upgraded = true
+							else:
+								any_upgraded = false
+								
 					if not found:
 						hud.show_message("未找到武器！")
 						return
