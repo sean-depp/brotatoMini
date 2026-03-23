@@ -100,3 +100,14 @@ func add_weapon() -> bool:
 		w.position = weapon_offsets[weapons.size()]
 	weapons.append(w)
 	return true
+
+# 重置武器系统：删除所有武器并重新添加初始武器
+func reset_weapons() -> void:
+	# 删除所有现有武器
+	for weapon in weapons:
+		if is_instance_valid(weapon):
+			weapon.queue_free()
+	weapons.clear()
+	
+	# 重新添加初始武器
+	add_weapon()

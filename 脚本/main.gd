@@ -205,6 +205,9 @@ func new_game():
 	$HUD.set_max_health(1)
 	$HUD.set_full_health()
 
+	# 重置武器系统（射程、攻速、武器数量）
+	$Player.reset_weapons()
+
 	$Player.start($StartPos.position)
 	
 	#$StartTimer.start()
