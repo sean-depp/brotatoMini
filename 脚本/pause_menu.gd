@@ -4,10 +4,17 @@ func update_value_labels() -> void:
 	var cur_scene = get_tree().get_current_scene()
 	if not cur_scene:
 		return
+	
+	# 更新金币显示
+	if cur_scene.has_node("HUD") and has_node("MainContainer/StatsContainer/StatsVBox/ScoreLabel"):
+		var main = cur_scene
+		if "score" in main:
+			get_node("MainContainer/StatsContainer/StatsVBox/ScoreLabel").text = "金币: %d" % main.score
+	
 	# HUD 的生命上限
-	if cur_scene.has_node("HUD") and has_node("Grid/HPVBox/HPValue"):
+	if cur_scene.has_node("HUD") and has_node("MainContainer/StatsContainer/StatsVBox/HPValue"):
 		var hud = cur_scene.get_node("HUD")
-		var hp_label = get_node("Grid/HPVBox/HPValue")
+		var hp_label = get_node("MainContainer/StatsContainer/StatsVBox/HPValue")
 		if hud and hp_label:
 			hp_label.text = "生命上限: %d" % hud.get_max_health()
 
@@ -17,13 +24,13 @@ func update_value_labels() -> void:
 		for child in player.get_children():
 			if child is Weapon:
 				var weapon = child
-				if has_node("Grid/RangeVBox/RangeValue") and weapon.has_method("get_auto_shoot_range"):
-					get_node("Grid/RangeVBox/RangeValue").text = "射程: %d" % int(weapon.get_auto_shoot_range())
-				if has_node("Grid/FireVBox/FireValue") and weapon.has_method("get_auto_shoot_interval"):
+				if has_node("MainContainer/StatsContainer/StatsVBox/RangeValue") and weapon.has_method("get_auto_shoot_range"):
+					get_node("MainContainer/StatsContainer/StatsVBox/RangeValue").text = "射程: %d" % int(weapon.get_auto_shoot_range())
+				if has_node("MainContainer/StatsContainer/StatsVBox/FireValue") and weapon.has_method("get_auto_shoot_interval"):
 					# 显示为秒数保留两位
-					get_node("Grid/FireVBox/FireValue").text = "攻速: %.2fs" % weapon.get_auto_shoot_interval()
-				if has_node("Grid/WeaponVBox/WeaponValue"):
-					get_node("Grid/WeaponVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
+					get_node("MainContainer/StatsContainer/StatsVBox/FireValue").text = "攻速: %.2fs" % weapon.get_auto_shoot_interval()
+				if has_node("MainContainer/StatsContainer/StatsVBox/WeaponValue"):
+					get_node("MainContainer/StatsContainer/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
 				# 只处理第一个找到的 Weapon
 				break
 

@@ -7,92 +7,198 @@
 layer = 10
 script = ExtResource("1_hax5v")
 
-[node name="Grid" type="GridContainer" parent="."]
-anchors_preset = 7
-anchor_left = 0.5
-anchor_top = 1.0
-anchor_right = 0.5
+[node name="MainContainer" type="HBoxContainer" parent="."]
+anchors_preset = 15
+anchor_right = 1.0
 anchor_bottom = 1.0
-offset_left = -400.0
-offset_top = -140.0
-offset_right = 400.0
 grow_horizontal = 2
-grow_vertical = 0
-columns = 4
+grow_vertical = 2
 
-[node name="WeaponVBox" type="VBoxContainer" parent="Grid"]
+[node name="ShopContainer" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 3
+size_flags_vertical = 3
+
+[node name="ShopTitle" type="Label" parent="MainContainer/ShopContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 48
+text = "商店"
+horizontal_alignment = 1
+
+[node name="ShopGrid" type="GridContainer" parent="MainContainer/ShopContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+columns = 2
+
+[node name="HPVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid"]
+custom_minimum_size = Vector2(200, 0)
 layout_mode = 2
 
-[node name="WeaponValue" type="Label" parent="Grid/WeaponVBox"]
-custom_minimum_size = Vector2(160, 24)
+[node name="HPLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/HPVBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 32
-text = "武器: 1"
+text = "生命上限"
 horizontal_alignment = 1
 
-[node name="WeaponButton" type="Button" parent="Grid/WeaponVBox"]
-custom_minimum_size = Vector2(160, 64)
+[node name="HPPrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/HPVBox"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
-theme_override_font_sizes/font_size = 64
-text = "增加武器"
+theme_override_font_sizes/font_size = 24
+text = "价格: 2"
+horizontal_alignment = 1
 
-[node name="RangeVBox" type="VBoxContainer" parent="Grid"]
-layout_mode = 2
-
-[node name="RangeValue" type="Label" parent="Grid/RangeVBox"]
-custom_minimum_size = Vector2(160, 24)
+[node name="BuyButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/HPVBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 32
-text = "射程: 0"
-horizontal_alignment = 1
+text = "购买"
 
-[node name="RangeButton" type="Button" parent="Grid/RangeVBox"]
-custom_minimum_size = Vector2(160, 64)
+[node name="RangeVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="RangeLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/RangeVBox"]
+custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
-theme_override_font_sizes/font_size = 64
+theme_override_font_sizes/font_size = 32
 text = "增加射程"
+horizontal_alignment = 1
 
-[node name="HPVBox" type="VBoxContainer" parent="Grid"]
+[node name="RangePrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/RangeVBox"]
+custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "价格: 1"
+horizontal_alignment = 1
 
-[node name="HPValue" type="Label" parent="Grid/HPVBox"]
-custom_minimum_size = Vector2(160, 24)
+[node name="RangeButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/RangeVBox"]
+custom_minimum_size = Vector2(0, 60)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 32
+text = "购买"
+
+[node name="FireVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="FireLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/FireVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "增加攻速"
+horizontal_alignment = 1
+
+[node name="FirePrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/FireVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "价格: 1"
+horizontal_alignment = 1
+
+[node name="FireRateButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/FireVBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "购买"
+
+[node name="WeaponVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="WeaponLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/WeaponVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "增加武器"
+horizontal_alignment = 1
+
+[node name="WeaponPrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/WeaponVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "价格: 10"
+horizontal_alignment = 1
+
+[node name="WeaponButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/WeaponVBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "购买"
+
+[node name="StatsContainer" type="VBoxContainer" parent="MainContainer"]
+custom_minimum_size = Vector2(300, 0)
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 3
+
+[node name="StatsTitle" type="Label" parent="MainContainer/StatsContainer"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 48
+text = "属性"
+horizontal_alignment = 1
+
+[node name="StatsVBox" type="VBoxContainer" parent="MainContainer/StatsContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScoreLabel" type="Label" parent="MainContainer/StatsContainer/StatsVBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 36
+text = "金币: 0"
+horizontal_alignment = 1
+
+[node name="HPValue" type="Label" parent="MainContainer/StatsContainer/StatsVBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 36
 text = "生命上限: 0"
 horizontal_alignment = 1
 
-[node name="BuyButton" type="Button" parent="Grid/HPVBox"]
-custom_minimum_size = Vector2(160, 64)
+[node name="RangeValue" type="Label" parent="MainContainer/StatsContainer/StatsVBox"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
-theme_override_font_sizes/font_size = 64
-text = "增加血量"
+theme_override_font_sizes/font_size = 36
+text = "射程: 0"
+horizontal_alignment = 1
 
-[node name="FireVBox" type="VBoxContainer" parent="Grid"]
-layout_mode = 2
-
-[node name="FireValue" type="Label" parent="Grid/FireVBox"]
-custom_minimum_size = Vector2(160, 24)
+[node name="FireValue" type="Label" parent="MainContainer/StatsContainer/StatsVBox"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 36
 text = "攻速: 0.00s"
 horizontal_alignment = 1
 
-[node name="FireRateButton" type="Button" parent="Grid/FireVBox"]
-custom_minimum_size = Vector2(160, 64)
+[node name="WeaponValue" type="Label" parent="MainContainer/StatsContainer/StatsVBox"]
+custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
-theme_override_font_sizes/font_size = 64
-text = "增加攻速"
+theme_override_font_sizes/font_size = 36
+text = "武器数: 0"
+horizontal_alignment = 1
 
-[connection signal="pressed" from="Grid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
-[connection signal="pressed" from="Grid/RangeVBox/RangeButton" to="." method="_on_range_button_pressed"]
-[connection signal="pressed" from="Grid/HPVBox/BuyButton" to="." method="_on_buy_button_pressed"]
-[connection signal="pressed" from="Grid/FireVBox/FireRateButton" to="." method="_on_fire_rate_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/RangeVBox/RangeButton" to="." method="_on_range_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/HPVBox/BuyButton" to="." method="_on_buy_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/FireVBox/FireRateButton" to="." method="_on_fire_rate_button_pressed"]
