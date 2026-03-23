@@ -32,6 +32,14 @@ var health_bar_bg: ColorRect
 
 var is_dead: bool = false
 
+# mob1 冲刺系统
+var is_dashing: bool = false
+var dash_timer: float = 0.0
+var dash_interval: float = 4.0  # 冲刺间隔（秒）
+var dash_duration: float = 0.5  # 冲刺持续时间（秒）
+var dash_speed_multiplier: float = 4.0  # 冲刺速度倍数
+var normal_speed: float = 100.0  # 正常移动速度
+
 func _ready():
 	mob_visuals = [
 		get_node("mob1/AnimatedSprite2D_1"),
@@ -227,7 +235,7 @@ func _spawn_drop_item() -> void:
 			drop_item.add_to_group("drops")
 		get_tree().get_root().call_deferred("add_child", drop_item)
 	
-func _physics_process(_delta: float) -> void:
+func _physics_process(delta: float) -> void:
 	# 持续检查地图边界（2560x1440）
 	const MAP_WIDTH = 2560.0
 	const MAP_HEIGHT = 1440.0
@@ -253,15 +261,34 @@ func _physics_process(_delta: float) -> void:
 		# 计算朝向玩家的方向
 		var direction_to_player = (player.global_position - global_position).normalized()
 		
-		# 获取当前速度大小
-		var current_speed = linear_velocity.length()
-		
-		# 如果速度为0，设置一个初始速度
-		if current_speed == 0:
-			current_speed = 100.0
-		
-		# 直接设置速度方向朝向玩家（不使用插值，避免原地旋转）
-		linear_velocity = direction_to_player * current_speed
+		# mob1 冲刺逻辑
+		if mob_type_index == 0:
+			# 更新冲刺计时器
+			dash_timer += delta
+			
+			# 检查是否应该开始冲刺
+			if not is_dashing and dash_timer >= dash_interval:
+				is_dashing = true
+				dash_timer = 0.0  # 重置计时器用于冲刺持续时间
+			
+			# 检查冲刺是否结束
+			if is_dashing and dash_timer >= dash_duration:
+				is_dashing = false
+				dash_timer = 0.0  # 重置计时器用于下一次冲刺间隔
+			
+			# 根据是否冲刺设置速度
+			var target_speed = normal_speed
+			if is_dashing:
+				target_speed = normal_speed * dash_speed_multiplier
+			
+			# 设置速度方向朝向玩家
+			linear_velocity = direction_to_player * target_speed
+		else:
+			# 其他怪物类型（mob2等）的正常移动逻辑
+			var current_speed = linear_velocity.length()
+			if current_speed == 0:
+				current_speed = 100.0
+			linear_velocity = direction_to_player * current_speed
 		
 		# 更新旋转角度以匹配移动方向
 		rotation = linear_velocity.angle()
