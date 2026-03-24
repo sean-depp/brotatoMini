@@ -1,8 +1,7 @@
-[gd_scene load_steps=7 format=3 uid="uid://bty13utpjcjwj"]
+[gd_scene load_steps=6 format=3 uid="uid://bty13utpjcjwj"]
 
 [ext_resource type="Script" uid="uid://drlpynxn66u7o" path="res://脚本/hud.gd" id="1_64ctp"]
 [ext_resource type="FontFile" uid="uid://bqyc44cmgmvaq" path="res://资源/fonts/Xolonium-Regular.ttf" id="2_8sq4i"]
-[ext_resource type="PackedScene" uid="uid://clh3x246m0amr" path="res://血槽/healthBar.tscn" id="3_vntsp"]
 [ext_resource type="PackedScene" uid="uid://br7bofi1vl21u" path="res://主场景/pause_menu.tscn" id="4_uiue5"]
 
 [sub_resource type="InputEventAction" id="InputEventAction_64ctp"]
@@ -13,6 +12,7 @@ events = [SubResource("InputEventAction_64ctp")]
 
 [node name="HUD" type="CanvasLayer"]
 script = ExtResource("1_64ctp")
+groups = ["hud"]
 
 [node name="ScoreLabel" type="Label" parent="."]
 anchors_preset = 5
@@ -78,8 +78,6 @@ grow_horizontal = 0
 theme_override_fonts/font = ExtResource("2_8sq4i")
 theme_override_font_sizes/font_size = 32
 text = "Level: 1"
-
-[node name="HealthBar" parent="." instance=ExtResource("3_vntsp")]
 
 [node name="PauseLabel" type="Label" parent="."]
 visible = false

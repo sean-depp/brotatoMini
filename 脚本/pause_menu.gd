@@ -49,14 +49,8 @@ func _on_buy_button_pressed() -> void:
 					hud.update_score(main.score)
 					update_value_labels()
 				else:
-					if hud.get_health() < hud.get_max_health():
-						# 扣除金币，增加血量值
-						hud.update_health_bar(1)
-						main.score -= 2
-						hud.update_score(main.score)
-					else:
-						# 生命值已达上限提示
-						hud.show_message("生命值已达上限！")
+					# 生命值已达上限提示
+					hud.show_message("生命值已达上限！")
 			else:
 				# 金币不足提示
 				hud.show_message("金币不足！")
@@ -159,4 +153,26 @@ func _on_weapon_button_pressed() -> void:
 						hud.show_message("武器数量已达上限！")
 						return
 			else:
-				hud.show_message("金币不足！")			
+				hud.show_message("金币不足！")
+
+func _on_heal_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检查金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 1:
+				# 尝试恢复血量
+				if hud.heal_health(1):
+					# 扣除金币，恢复1血
+					main.score -= 1
+					hud.update_score(main.score)
+					update_value_labels()
+				else:
+					# 血量已满提示
+					hud.show_message("血量已满！")
+			else:
+				# 金币不足提示
+				hud.show_message("金币不足！")

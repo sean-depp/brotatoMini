@@ -5,6 +5,11 @@ signal hit
 @export var speed = 400 # How fast the player will move (pixels/sec).
 var screen_size # Size of the game window.
 
+# 血量系统（数值型血条）
+var max_health: int = 1
+var current_health: int = 1
+var is_dead: bool = false
+
 # 武器系统：同时挂载多把枪（最多 `max_weapons`）
 @export var max_weapons: int = 6
 # 左右各三点，依次从上到下右侧再左侧
@@ -66,6 +71,14 @@ func _physics_process(delta: float) -> void:
 		$AnimatedSprite2D.flip_v = velocity.y > 0
 
 func under_hurt() -> void:
+	# 使用数值型血条系统
+	take_damage(1)
+	
+	# 更新HUD血条显示
+	var hud = get_tree().get_first_node_in_group("hud")
+	if hud and hud.has_method("update_health_bar"):
+		hud.update_health_bar(current_health, max_health)
+	
 	#hide() # Player disappears after being hit.
 	hit.emit()
 	# Must be deferred as we can't change physics properties on a physics callback.
@@ -83,6 +96,10 @@ func start(pos):
 	position = pos
 	show()
 	$CollisionShape2D.disabled = false
+	
+	# 重置生命值状态
+	is_dead = false
+	current_health = max_health
 
 func _on_invincibility_timer_timeout() -> void:
 	$CollisionShape2D.set_deferred("disabled", false)
@@ -111,3 +128,59 @@ func reset_weapons() -> void:
 	
 	# 重新添加初始武器
 	add_weapon()
+
+# 设置最大生命值
+func set_max_health(new_max: int) -> void:
+	max_health = new_max
+	if current_health > max_health:
+		current_health = max_health
+
+# 设置当前生命值
+func set_health(health: int) -> void:
+	if health < 0:
+		health = 0
+	if health > max_health:
+		health = max_health
+	current_health = health
+
+# 增加生命值
+func add_health(amount: int) -> void:
+	set_health(current_health + amount)
+
+# 减少生命值
+func subtract_health(amount: int) -> void:
+	set_health(current_health - amount)
+
+# 获取当前生命值
+func get_health() -> int:
+	return current_health
+
+# 获取最大生命值
+func get_max_health() -> int:
+	return max_health
+
+# 玩家受伤函数
+func take_damage(amount: int) -> void:
+	if is_dead:
+		return
+	
+	current_health -= amount
+	
+	# 检查是否死亡
+	if current_health <= 0:
+		die()
+
+# 玩家死亡函数
+func die() -> void:
+	if is_dead:
+		return
+	is_dead = true
+	
+	# 禁用碰撞
+	$CollisionShape2D.set_deferred("disabled", true)
+	
+	# 停止移动
+	hide()
+	
+	# 发出死亡信号
+	hit.emit()

@@ -140,6 +140,33 @@ theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 32
 text = "购买"
 
+[node name="HealVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid"]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="HealLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/HealVBox"]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "恢复血量"
+horizontal_alignment = 1
+
+[node name="HealPrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/HealVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "价格: 1"
+horizontal_alignment = 1
+
+[node name="HealButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/HealVBox"]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "购买"
+
 [node name="StatsContainer" type="VBoxContainer" parent="MainContainer"]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -202,3 +229,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/RangeVBox/RangeButton" to="." method="_on_range_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/HPVBox/BuyButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/FireVBox/FireRateButton" to="." method="_on_fire_rate_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/HealVBox/HealButton" to="." method="_on_heal_button_pressed"]

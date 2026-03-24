@@ -52,10 +52,8 @@ func game_over():
 	if game_over_called:
 		return
 	
-	$HUD.update_health_bar(-1)
-
 	# 检测血量，只有为0才是game over
-	if $HUD.get_health() <= 0:
+	if $Player.get_health() <= 0:
 		game_over_called = true  # 标记game_over已调用
 		running = false
 		$Player.hide()
@@ -202,8 +200,12 @@ func new_game():
 	
 	score = 20
 	
-	$HUD.set_max_health(1)
-	$HUD.set_full_health()
+	# 设置玩家的血量（数值型血条系统）
+	$Player.set_max_health(1)
+	$Player.set_health(1)
+	
+	# 更新HUD血条显示
+	$HUD.update_health_bar(1, 1)
 
 	# 重置武器系统（射程、攻速、武器数量）
 	$Player.reset_weapons()

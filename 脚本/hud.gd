@@ -4,9 +4,21 @@ extends CanvasLayer
 signal start_game
 signal pause_toggle_requested
 
+# 血条系统
+var health_bar: Control
+var health_bar_fill: ColorRect
+var health_bar_bg: ColorRect
+var health_label: Label
+
 func _ready() -> void:
 	# 设置为始终处理，即使游戏暂停也能接收输入
 	process_mode = PROCESS_MODE_ALWAYS
+	
+	# 将HUD添加到"hud"组，方便其他节点查找
+	add_to_group("hud")
+	
+	# 初始化血条
+	_setup_health_bar()
 
 func _unhandled_input(event):
 	if event.is_action_pressed("菜单"):
@@ -42,26 +54,99 @@ func show_game_over():
 func update_score(score):
 	$ScoreLabel.text = str(score)
 
-func update_health_bar(value:int):
-	if value < 0:
-		$HealthBar.subtract_health(abs(value))
-	else:
-		$HealthBar.add_health(value)
-		
-func get_health() -> int:
-	return $HealthBar.get_health()
-
-func set_max_health(new_max: int):
-	$HealthBar.set_max_health(new_max)
+# 初始化血条
+func _setup_health_bar() -> void:
+	# 创建血条容器（Control节点）
+	health_bar = Control.new()
+	health_bar.name = "HealthBar"
+	health_bar.position = Vector2(20, 20)  # 血条位置（左上角）
+	health_bar.custom_minimum_size = Vector2(200, 20)  # 血条容器大小
 	
-func get_max_health() -> int:
-	return $HealthBar.max_health
+	# 创建血条背景（红色）
+	health_bar_bg = ColorRect.new()
+	health_bar_bg.name = "Background"
+	health_bar_bg.color = Color(0.8, 0.2, 0.2, 0.8)
+	health_bar_bg.size = Vector2(200, 20)  # 背景大小
+	health_bar_bg.position = Vector2(0, 0)
+	health_bar.add_child(health_bar_bg)
+	
+	# 创建血条前景（绿色）
+	health_bar_fill = ColorRect.new()
+	health_bar_fill.name = "Fill"
+	health_bar_fill.color = Color(0.2, 0.8, 0.2, 0.8)
+	health_bar_fill.size = Vector2(200, 20)  # 前景大小（初始为满血）
+	health_bar_fill.position = Vector2(0, 0)
+	health_bar.add_child(health_bar_fill)
+	
+	# 创建血量标签（显示当前/最大血量）
+	health_label = Label.new()
+	health_label.name = "HealthLabel"
+	health_label.text = "1/1"
+	health_label.position = Vector2(210, 0)  # 在血条右侧
+	health_label.add_theme_font_size_override("font_size", 16)
+	health_label.add_theme_color_override("font_color", Color.WHITE)
+	health_bar.add_child(health_label)
+	
+	# 将血条添加到HUD节点
+	add_child(health_bar)
+
+# 更新血条显示
+func update_health_bar(current: int, max_val: int) -> void:
+	if health_bar_fill != null and is_instance_valid(health_bar_fill):
+		# 计算血条宽度比例
+		var health_ratio = float(current) / float(max_val)
+		# 更新血条前景宽度
+		health_bar_fill.size.x = 200.0 * health_ratio
+	
+	# 更新血量标签
+	if health_label != null and is_instance_valid(health_label):
+		health_label.text = "%d/%d" % [current, max_val]
 
 func set_full_health():
-	$HealthBar.set_full_health()
+	if health_bar_fill != null and is_instance_valid(health_bar_fill):
+		health_bar_fill.size.x = 200.0
 
-func add_max_health(new_max: int) -> bool:
-	return $HealthBar.add_max_health(new_max)
+# 获取玩家当前血量
+func get_health() -> int:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("get_health"):
+		return player.get_health()
+	return 0
+
+# 获取玩家最大血量
+func get_max_health() -> int:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("get_max_health"):
+		return player.get_max_health()
+	return 0
+
+# 增加最大血量
+func add_max_health(amount: int) -> bool:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("get_max_health"):
+		var current_max = player.get_max_health()
+		# 血量上限最大10
+		if current_max < 10:
+			player.set_max_health(current_max + amount)
+			player.add_health(amount)
+			# 更新HUD血条显示
+			update_health_bar(player.get_health(), player.get_max_health())
+			return true
+	return false
+
+# 恢复血量
+func heal_health(amount: int) -> bool:
+	var player = get_tree().get_first_node_in_group("player")
+	if player and player.has_method("get_health") and player.has_method("get_max_health"):
+		var current = player.get_health()
+		var max_val = player.get_max_health()
+		# 只有当前血量小于最大血量时才能恢复
+		if current < max_val:
+			player.add_health(amount)
+			# 更新HUD血条显示
+			update_health_bar(player.get_health(), player.get_max_health())
+			return true
+	return false
 
 func _on_message_timer_timeout() -> void:
 	$Message.hide()
