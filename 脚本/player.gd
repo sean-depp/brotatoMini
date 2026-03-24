@@ -2,7 +2,8 @@ extends Area2D
 
 signal hit
 
-@export var speed = 400 # How fast the player will move (pixels/sec).
+@export var speed = 300 # How fast the player will move (pixels/sec).
+@export var max_speed = 1000 # 最大速度限制
 var screen_size # Size of the game window.
 
 # 血量系统（数值型血条）
@@ -184,3 +185,14 @@ func die() -> void:
 	
 	# 发出死亡信号
 	hit.emit()
+
+# 增加移动速度
+func increase_speed(amount: float) -> bool:
+	if speed < max_speed:
+		speed += amount
+		return true
+	return false
+
+# 获取当前速度
+func get_speed() -> float:
+	return speed

@@ -33,6 +33,10 @@ func update_value_labels() -> void:
 					get_node("MainContainer/StatsContainer/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
 				# 只处理第一个找到的 Weapon
 				break
+		
+		# 更新速度显示
+		if has_node("MainContainer/StatsContainer/StatsVBox/SpeedValue") and player.has_method("get_speed"):
+			get_node("MainContainer/StatsContainer/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
 
 func _on_buy_button_pressed() -> void:
 	var cur_scene = get_tree().get_current_scene()
@@ -173,6 +177,30 @@ func _on_heal_button_pressed() -> void:
 				else:
 					# 血量已满提示
 					hud.show_message("血量已满！")
+			else:
+				# 金币不足提示
+				hud.show_message("金币不足！")
+
+func _on_speed_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检查金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 1:
+				# 尝试增加速度
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					if player.increase_speed(20.0):
+						# 扣除金币，增加20速度
+						main.score -= 1
+						hud.update_score(main.score)
+						update_value_labels()
+					else:
+						# 速度已达上限提示
+						hud.show_message("速度已达上限！")
 			else:
 				# 金币不足提示
 				hud.show_message("金币不足！")
