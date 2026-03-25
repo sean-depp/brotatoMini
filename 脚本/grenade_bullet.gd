@@ -16,8 +16,8 @@ var damage: int = 1
 # 爆炸伤害衰减（边缘伤害 = damage * damage_falloff）
 @export var damage_falloff: float = 0.5
 
-# 爆炸特效场景（可选）
-@export var explosion_effect_scene: PackedScene
+# 爆炸特效场景
+var explosion_effect_scene = preload("res://子弹/explosion_effect.tscn")
 
 func _ready():
 	# 连接body_entered信号，用于检测与怪物的碰撞
@@ -76,10 +76,11 @@ func explode() -> void:
 			var final_damage = max(1, int(damage * damage_multiplier))
 			mob.take_damage(final_damage)
 	
-	# 生成爆炸特效（如果设置了）
+	# 生成爆炸特效
 	if explosion_effect_scene != null:
 		var effect = explosion_effect_scene.instantiate()
 		effect.global_position = global_position
+		effect.radius = explosion_radius  # 传递爆炸半径
 		get_tree().get_root().add_child(effect)
 	
 	# 销毁子弹
