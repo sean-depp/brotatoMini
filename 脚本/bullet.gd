@@ -6,6 +6,9 @@ extends Area2D
 # 子弹方向
 var direction = Vector2.RIGHT
 
+# 子弹伤害（由武器设置）
+var damage = 1
+
 # 掉落物品场景
 @export var drop_item_scene: PackedScene
 # 新揭殖道具场景（吸磊所有金币）
@@ -30,9 +33,9 @@ func _on_visible_on_screen_notifier_2d_screen_exited():
 func _on_body_entered(body):
 	# 如果碰到的是怪物，造成伤害
 	if body.is_in_group("mobs"):
-		# 调用怪物的受伤函数（造成1点伤害）
+		# 调用怪物的受伤函数（使用子弹的伤害值）
 		if body.has_method("take_damage"):
-			body.take_damage(1)
+			body.take_damage(damage)
 		
 		# 销毁子弹
 		queue_free()

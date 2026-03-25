@@ -37,6 +37,14 @@ func update_value_labels() -> void:
 		# 更新速度显示
 		if has_node("MainContainer/StatsContainer/StatsVBox/SpeedValue") and player.has_method("get_speed"):
 			get_node("MainContainer/StatsContainer/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
+		
+		# 更新伤害显示（取第一个武器的伤害值）
+		if has_node("MainContainer/StatsContainer/StatsVBox/DamageValue"):
+			for child in player.get_children():
+				if child is Weapon:
+					if child.has_method("get_damage"):
+						get_node("MainContainer/StatsContainer/StatsVBox/DamageValue").text = "伤害: %d" % child.get_damage()
+					break
 
 func _on_buy_button_pressed() -> void:
 	var cur_scene = get_tree().get_current_scene()
@@ -186,7 +194,7 @@ func _on_speed_button_pressed() -> void:
 	if cur_scene and cur_scene.has_node("HUD"):
 		var hud = cur_scene.get_node("HUD")
 		
-		# 检查金币数
+		# 检测金币数
 		var main = get_tree().get_current_scene()
 		if main and "score" in main:
 			if main.score >= 1:
@@ -203,4 +211,40 @@ func _on_speed_button_pressed() -> void:
 						hud.show_message("速度已达上限！")
 			else:
 				# 金币不足提示
+				hud.show_message("金币不足！")
+
+func _on_damage_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检测金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 10:
+				# 尝试找到 Player 的所有武器并一次性升级伤害（成功则只扣一次金币）
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					var found = false
+					var any_upgraded = false
+					for child in player.get_children():
+						if typeof(child) == TYPE_OBJECT and child.has_method("increase_damage"):
+							found = true
+							if child.increase_damage(1):
+								any_upgraded = true
+							else:
+								any_upgraded = false
+								
+					if not found:
+						hud.show_message("未找到武器！")
+						return
+					if any_upgraded:
+						main.score -= 10
+						hud.update_score(main.score)
+						update_value_labels()
+						return
+					else:
+						hud.show_message("伤害已达上限！")
+						return
+			else:
 				hud.show_message("金币不足！")

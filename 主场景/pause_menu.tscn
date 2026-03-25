@@ -194,6 +194,33 @@ theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 32
 text = "购买"
 
+[node name="DamageVBox" type="VBoxContainer" parent="MainContainer/ShopContainer/ShopGrid" unique_id=789123456]
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+
+[node name="DamageLabel" type="Label" parent="MainContainer/ShopContainer/ShopGrid/DamageVBox" unique_id=789123457]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "增加伤害"
+horizontal_alignment = 1
+
+[node name="DamagePrice" type="Label" parent="MainContainer/ShopContainer/ShopGrid/DamageVBox" unique_id=789123458]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "价格: 10"
+horizontal_alignment = 1
+
+[node name="DamageButton" type="Button" parent="MainContainer/ShopContainer/ShopGrid/DamageVBox" unique_id=789123459]
+custom_minimum_size = Vector2(0, 60)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "购买"
+
 [node name="StatsContainer" type="VBoxContainer" parent="MainContainer" unique_id=584198350]
 custom_minimum_size = Vector2(300, 0)
 layout_mode = 2
@@ -259,9 +286,18 @@ theme_override_font_sizes/font_size = 36
 text = "速度: 0"
 horizontal_alignment = 1
 
+[node name="DamageValue" type="Label" parent="MainContainer/StatsContainer/StatsVBox" unique_id=789123460]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 36
+text = "伤害: 0"
+horizontal_alignment = 1
+
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/HPVBox/BuyButton" to="." method="_on_buy_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/HealVBox/HealButton" to="." method="_on_heal_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/RangeVBox/RangeButton" to="." method="_on_range_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/FireVBox/FireRateButton" to="." method="_on_fire_rate_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
 [connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/SpeedVBox/SpeedButton" to="." method="_on_speed_button_pressed"]
+[connection signal="pressed" from="MainContainer/ShopContainer/ShopGrid/DamageVBox/DamageButton" to="." method="_on_damage_button_pressed"]

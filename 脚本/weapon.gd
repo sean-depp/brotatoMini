@@ -4,6 +4,10 @@ class_name Weapon
 # 子弹场景
 @export var bullet_scene: PackedScene
 
+# 武器伤害（初始为1）
+@export var damage = 1
+@export var max_damage = 10  # 最大伤害限制
+
 # 射击冷却时间
 @export var fire_rate = 0.1
 var can_shoot = true
@@ -71,6 +75,8 @@ func shoot(target_pos: Variant = null) -> void:
 	bullet.global_position = spawn_pos
 	var direction: Vector2 = Vector2(cos(spawn_rot), sin(spawn_rot)).normalized()
 	bullet.direction = direction
+	# 传递武器伤害给子弹
+	bullet.damage = damage
 	player.get_parent().add_child(bullet)
 
 	# 启动冷却
@@ -172,3 +178,22 @@ func auto_shoot() -> void:
 
 func _on_auto_shoot_timeout() -> void:
 	auto_shoot()
+
+# 增加武器伤害，返回是否成功（true 表示实际增加）
+func increase_damage(amount: int = 1) -> bool:
+	var new_damage = damage + amount
+	if new_damage > max_damage:
+		new_damage = max_damage
+	# 若没有实际变化则返回 false
+	if new_damage == damage:
+		return false
+	damage = new_damage
+	return true
+
+# 获取当前武器伤害（便于 UI 显示）
+func get_damage() -> int:
+	return damage
+
+# 重置武器伤害到初始值
+func reset_damage() -> void:
+	damage = 1

@@ -129,6 +129,11 @@ func reset_weapons() -> void:
 	
 	# 重新添加初始武器
 	add_weapon()
+	
+	# 重置所有武器的伤害到初始值
+	for weapon in weapons:
+		if weapon.has_method("reset_damage"):
+			weapon.reset_damage()
 
 # 设置最大生命值
 func set_max_health(new_max: int) -> void:
