@@ -287,6 +287,42 @@ theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 24
 text = "购买"
 
+[node name="GrenadeLauncherVBox" type="VBoxContainer" parent="MainContainer/LeftPanel/WeaponShopGrid"]
+custom_minimum_size = Vector2(180, 0)
+layout_mode = 2
+
+[node name="GrenadeLauncherLabel" type="Label" parent="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox"]
+custom_minimum_size = Vector2(0, 30)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 26
+text = "榴弹枪"
+horizontal_alignment = 1
+
+[node name="GrenadeLauncherStats" type="Label" parent="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox"]
+custom_minimum_size = Vector2(0, 50)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 16
+text = "伤害:3 攻速:0.83
+射程:250 爆炸:80"
+horizontal_alignment = 1
+
+[node name="GrenadeLauncherPrice" type="Label" parent="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox"]
+custom_minimum_size = Vector2(0, 22)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 18
+text = "价格: 20"
+horizontal_alignment = 1
+
+[node name="GrenadeLauncherButton" type="Button" parent="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox"]
+custom_minimum_size = Vector2(0, 45)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 24
+text = "购买"
+
 [node name="RightPanel" type="VBoxContainer" parent="MainContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -376,3 +412,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="MainContainer/LeftPanel/ShopGrid/DamageVBox/DamageButton" to="." method="_on_damage_button_pressed"]
 [connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
 [connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/ShotgunVBox/ShotgunButton" to="." method="_on_shotgun_button_pressed"]
+[connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox/GrenadeLauncherButton" to="." method="_on_grenade_launcher_button_pressed"]

@@ -1,0 +1,26 @@
+[gd_scene format=3 uid="uid://mm3jvqyhy0b1"]
+
+[ext_resource type="Script" uid="uid://bwpiti37a8jb1" path="res://脚本/weapon.gd" id="1_weapon"]
+[ext_resource type="PackedScene" path="res://子弹/grenade_bullet.tscn" id="2_bullet"]
+[ext_resource type="Texture2D" uid="uid://dwttnjrmmllyy" path="res://资源/art/Tiny Gun Pack/06.png" id="3_ibcww"]
+
+[node name="GrenadeLauncher" type="Node2D" unique_id=1548854886]
+script = ExtResource("1_weapon")
+bullet_scene = ExtResource("2_bullet")
+base_damage = 3
+base_fire_interval = 1.2
+base_range = 250.0
+
+[node name="Handle" type="Node2D" parent="." unique_id=957182311]
+
+[node name="Gun" type="Sprite2D" parent="Handle" unique_id=602557774]
+scale = Vector2(1.2, 1.2)
+texture = ExtResource("3_ibcww")
+
+[node name="Muzzle" type="Marker2D" parent="Handle" unique_id=276996282]
+position = Vector2(25, 0)
+
+[node name="ShootTimer" type="Timer" parent="." unique_id=128446336]
+wait_time = 1.2
+
+[connection signal="timeout" from="ShootTimer" to="." method="_on_shoot_timer_timeout"]

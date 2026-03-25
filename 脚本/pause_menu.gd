@@ -190,6 +190,28 @@ func _on_shotgun_button_pressed() -> void:
 			else:
 				hud.show_message("金币不足！")
 
+func _on_grenade_launcher_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var main = get_tree().get_current_scene()
+		var hud = cur_scene.get_node("HUD")
+
+		if main and "score" in main:
+			if main.score >= 20:
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					if player.add_grenade_launcher():
+						main.score -= 20
+						hud.update_score(main.score)
+						hud.show_message("购买榴弹枪成功！")
+						update_value_labels()
+						return
+					else:
+						hud.show_message("武器数量已达上限！")
+						return
+			else:
+				hud.show_message("金币不足！")
+
 func _on_heal_button_pressed() -> void:
 	var cur_scene = get_tree().get_current_scene()
 	if cur_scene and cur_scene.has_node("HUD"):

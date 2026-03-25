@@ -198,7 +198,7 @@ func new_game():
 	get_tree().call_group("magnets", "queue_free")
 	get_tree().call_group("mob_bullets", "queue_free")
 	
-	score = 20
+	score = 40
 	
 	# 设置玩家的血量（数值型血条系统）
 	$Player.set_max_health(1)

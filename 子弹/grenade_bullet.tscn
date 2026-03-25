@@ -1,0 +1,21 @@
+[gd_scene format=3 uid="uid://c7r6rxsq05grr"]
+
+[ext_resource type="Script" uid="uid://dd34jqgt5iot6" path="res://脚本/grenade_bullet.gd" id="1_grenade"]
+[ext_resource type="Texture2D" uid="uid://wd6i25wlw7yo" path="res://资源/art/Laser Sprites/14.png" id="2_8ci2n"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_grenade"]
+
+[node name="GrenadeBullet" type="Area2D" unique_id=1315271253]
+collision_layer = 4
+script = ExtResource("1_grenade")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1437533979]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_8ci2n")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=68216003]
+shape = SubResource("CircleShape2D_grenade")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="." unique_id=1471247590]
+
+[connection signal="screen_exited" from="VisibleOnScreenNotifier2D" to="." method="_on_visible_on_screen_notifier_2d_screen_exited"]

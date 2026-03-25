@@ -28,11 +28,12 @@ var is_invincible: bool = false
 var weapons: Array = []
 var weapon_scene = preload("res://武器/weapon.tscn")
 var shotgun_scene = preload("res://武器/shotgun.tscn")  # 霰弹枪场景
+var grenade_launcher_scene = preload("res://武器/grenade_launcher.tscn")  # 榴弹枪场景
 
 func _ready() -> void:
 	# 地图大小 2560x1440（2K）
 	screen_size = Vector2(2560, 1440)
-	add_weapon()
+	# 开局不添加武器，玩家需要购买武器
 	
 	# 将玩家添加到 "player" 组，方便怪物找到玩家
 	add_to_group("player")
@@ -157,24 +158,27 @@ func add_shotgun() -> bool:
 	weapons.append(w)
 	return true
 
-# 重置武器系统：删除所有武器并重新添加初始武器
+# 在玩家身上添加一把榴弹枪实例（不会检查货币）
+func add_grenade_launcher() -> bool:
+	if weapons.size() >= max_weapons:
+		return false
+	var w = grenade_launcher_scene.instantiate()
+	add_child(w)
+	w.name = "GrenadeLauncher%d" % (weapons.size() + 1)
+	# 放置到预设偏移位置（如果有）
+	if weapon_offsets.size() > weapons.size():
+		w.position = weapon_offsets[weapons.size()]
+	weapons.append(w)
+	return true
+
+# 重置武器系统：删除所有武器（不添加初始武器）
 func reset_weapons() -> void:
 	# 删除所有现有武器
 	for weapon in weapons:
 		if is_instance_valid(weapon):
 			weapon.queue_free()
 	weapons.clear()
-	
-	# 重新添加初始武器
-	add_weapon()
-	
-	# 重置所有武器的加成属性到初始值
-	for weapon in weapons:
-		if weapon.has_method("reset_bonuses"):
-			weapon.reset_bonuses()
-		elif weapon.has_method("reset_damage"):
-			# 兼容旧方法
-			weapon.reset_damage()
+	# 不再自动添加初始武器，玩家需要购买武器
 
 # 设置最大生命值
 func set_max_health(new_max: int) -> void:
