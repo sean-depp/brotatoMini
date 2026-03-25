@@ -1,8 +1,0 @@
-[gd_scene load_steps=3 format=3 uid="uid://clh3x246m0amr"]
-
-[ext_resource type="Script" uid="uid://dkxu6y3jki6kj" path="res://脚本/health_bar.gd" id="1_qxsel"]
-[ext_resource type="PackedScene" uid="uid://dq73wkvc0qd0t" path="res://血槽/health.tscn" id="2_md2iy"]
-
-[node name="HealthBar" type="HBoxContainer"]
-script = ExtResource("1_qxsel")
-heart_scene = ExtResource("2_md2iy")
