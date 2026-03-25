@@ -11,6 +11,9 @@ var max_health: int = 1
 var current_health: int = 1
 var is_dead: bool = false
 
+# 无敌状态闪烁
+var is_invincible: bool = false
+
 # 武器系统：同时挂载多把枪（最多 `max_weapons`）
 @export var max_weapons: int = 6
 # 左右各三点，依次从上到下右侧再左侧
@@ -71,8 +74,23 @@ func _physics_process(delta: float) -> void:
 	elif velocity.y != 0:
 		$AnimatedSprite2D.animation = "up"
 		$AnimatedSprite2D.flip_v = velocity.y > 0
+	
+	# 无敌状态闪烁效果（使用透明度，不影响碰撞检测）
+	if is_invincible:
+		# 使用时间来实现闪烁，每0.1秒切换一次透明度
+		var flash_visible = int(Time.get_ticks_msec() / 100.0) % 2 == 0
+		if flash_visible:
+			$AnimatedSprite2D.modulate.a = 1.0  # 完全不透明
+		else:
+			$AnimatedSprite2D.modulate.a = 0.3  # 半透明
+	else:
+		$AnimatedSprite2D.modulate.a = 1.0  # 确保正常状态下不透明
 
 func under_hurt() -> void:
+	# 如果已经无敌，不再受伤
+	if is_invincible:
+		return
+	
 	# 使用数值型血条系统
 	take_damage(1)
 	
@@ -87,6 +105,9 @@ func under_hurt() -> void:
 	# 如果在引擎的碰撞处理过程中禁用区域的碰撞形状可能会导致错误。
 	# 使用 set_deferred() 告诉 Godot 等待可以安全地禁用形状时再这样做。
 	$CollisionShape2D.set_deferred("disabled", true)
+	
+	# 启动无敌状态和闪烁效果
+	is_invincible = true
 
 	$InvincibilityTimer.wait_time = 1
 	$InvincibilityTimer.start()
@@ -105,6 +126,9 @@ func start(pos):
 
 func _on_invincibility_timer_timeout() -> void:
 	$CollisionShape2D.set_deferred("disabled", false)
+	# 结束无敌状态，恢复精灵透明度
+	is_invincible = false
+	$AnimatedSprite2D.modulate.a = 1.0
 
 
 # 在玩家身上添加一把武器实例（冲锋枪，不会检查货币）
