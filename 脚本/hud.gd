@@ -125,8 +125,8 @@ func add_max_health(amount: int) -> bool:
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.has_method("get_max_health"):
 		var current_max = player.get_max_health()
-		# 血量上限最大10
-		if current_max < 10:
+		# 血量上限最大100
+		if current_max < 100:
 			player.set_max_health(current_max + amount)
 			player.add_health(amount)
 			# 更新HUD血条显示

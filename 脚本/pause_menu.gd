@@ -6,44 +6,45 @@ func update_value_labels() -> void:
 		return
 	
 	# 更新金币显示
-	if cur_scene.has_node("HUD") and has_node("MainContainer/StatsContainer/StatsVBox/ScoreLabel"):
+	if cur_scene.has_node("HUD") and has_node("MainContainer/RightPanel/StatsVBox/ScoreLabel"):
 		var main = cur_scene
 		if "score" in main:
-			get_node("MainContainer/StatsContainer/StatsVBox/ScoreLabel").text = "金币: %d" % main.score
+			get_node("MainContainer/RightPanel/StatsVBox/ScoreLabel").text = "金币: %d" % main.score
 	
 	# HUD 的生命上限
-	if cur_scene.has_node("HUD") and has_node("MainContainer/StatsContainer/StatsVBox/HPValue"):
+	if cur_scene.has_node("HUD") and has_node("MainContainer/RightPanel/StatsVBox/HPValue"):
 		var hud = cur_scene.get_node("HUD")
-		var hp_label = get_node("MainContainer/StatsContainer/StatsVBox/HPValue")
+		var hp_label = get_node("MainContainer/RightPanel/StatsVBox/HPValue")
 		if hud and hp_label:
 			hp_label.text = "生命上限: %d" % hud.get_max_health()
 
-	# Player -> Weapon 的数值
+	# Player -> Weapon 的数值（显示加成值，初始为0）
 	if cur_scene.has_node("Player"):
 		var player = cur_scene.get_node("Player")
 		for child in player.get_children():
 			if child is Weapon:
 				var weapon = child
-				if has_node("MainContainer/StatsContainer/StatsVBox/RangeValue") and weapon.has_method("get_auto_shoot_range"):
-					get_node("MainContainer/StatsContainer/StatsVBox/RangeValue").text = "射程: %d" % int(weapon.get_auto_shoot_range())
-				if has_node("MainContainer/StatsContainer/StatsVBox/FireValue") and weapon.has_method("get_auto_shoot_interval"):
-					# 显示为秒数保留两位
-					get_node("MainContainer/StatsContainer/StatsVBox/FireValue").text = "攻速: %.2fs" % weapon.get_auto_shoot_interval()
-				if has_node("MainContainer/StatsContainer/StatsVBox/WeaponValue"):
-					get_node("MainContainer/StatsContainer/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
+				# 显示射程加成
+				if has_node("MainContainer/RightPanel/StatsVBox/RangeValue") and weapon.has_method("get_range_bonus"):
+					get_node("MainContainer/RightPanel/StatsVBox/RangeValue").text = "射程: %d" % int(weapon.get_range_bonus())
+				# 显示攻速加成（每秒攻击次数的增加值）
+				if has_node("MainContainer/RightPanel/StatsVBox/FireValue") and weapon.has_method("get_fire_rate_bonus"):
+					get_node("MainContainer/RightPanel/StatsVBox/FireValue").text = "攻速: %.1f" % weapon.get_fire_rate_bonus()
+				if has_node("MainContainer/RightPanel/StatsVBox/WeaponValue"):
+					get_node("MainContainer/RightPanel/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
 				# 只处理第一个找到的 Weapon
 				break
 		
 		# 更新速度显示
-		if has_node("MainContainer/StatsContainer/StatsVBox/SpeedValue") and player.has_method("get_speed"):
-			get_node("MainContainer/StatsContainer/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
+		if has_node("MainContainer/RightPanel/StatsVBox/SpeedValue") and player.has_method("get_speed"):
+			get_node("MainContainer/RightPanel/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
 		
-		# 更新伤害显示（取第一个武器的伤害值）
-		if has_node("MainContainer/StatsContainer/StatsVBox/DamageValue"):
+		# 更新伤害加成显示（取第一个武器的伤害加成值）
+		if has_node("MainContainer/RightPanel/StatsVBox/DamageValue"):
 			for child in player.get_children():
 				if child is Weapon:
-					if child.has_method("get_damage"):
-						get_node("MainContainer/StatsContainer/StatsVBox/DamageValue").text = "伤害: %d" % child.get_damage()
+					if child.has_method("get_damage_bonus"):
+						get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: %d" % child.get_damage_bonus()
 					break
 
 func _on_buy_button_pressed() -> void:
@@ -158,7 +159,29 @@ func _on_weapon_button_pressed() -> void:
 					if player.add_weapon():
 						main.score -= 10
 						hud.update_score(main.score)
-						hud.show_message("购买武器成功！")
+						hud.show_message("购买冲锋枪成功！")
+						update_value_labels()
+						return
+					else:
+						hud.show_message("武器数量已达上限！")
+						return
+			else:
+				hud.show_message("金币不足！")
+
+func _on_shotgun_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var main = get_tree().get_current_scene()
+		var hud = cur_scene.get_node("HUD")
+
+		if main and "score" in main:
+			if main.score >= 15:
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					if player.add_shotgun():
+						main.score -= 15
+						hud.update_score(main.score)
+						hud.show_message("购买霰弹枪成功！")
 						update_value_labels()
 						return
 					else:

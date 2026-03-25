@@ -24,6 +24,7 @@ var is_dead: bool = false
 ]
 var weapons: Array = []
 var weapon_scene = preload("res://武器/weapon.tscn")
+var shotgun_scene = preload("res://武器/shotgun.tscn")  # 霰弹枪场景
 
 func _ready() -> void:
 	# 地图大小 2560x1440（2K）
@@ -106,13 +107,26 @@ func _on_invincibility_timer_timeout() -> void:
 	$CollisionShape2D.set_deferred("disabled", false)
 
 
-# 在玩家身上添加一把武器实例（不会检查货币）
+# 在玩家身上添加一把武器实例（冲锋枪，不会检查货币）
 func add_weapon() -> bool:
 	if weapons.size() >= max_weapons:
 		return false
 	var w = weapon_scene.instantiate()
 	add_child(w)
 	w.name = "Weapon%d" % (weapons.size() + 1)
+	# 放置到预设偏移位置（如果有）
+	if weapon_offsets.size() > weapons.size():
+		w.position = weapon_offsets[weapons.size()]
+	weapons.append(w)
+	return true
+
+# 在玩家身上添加一把霰弹枪实例（不会检查货币）
+func add_shotgun() -> bool:
+	if weapons.size() >= max_weapons:
+		return false
+	var w = shotgun_scene.instantiate()
+	add_child(w)
+	w.name = "Shotgun%d" % (weapons.size() + 1)
 	# 放置到预设偏移位置（如果有）
 	if weapon_offsets.size() > weapons.size():
 		w.position = weapon_offsets[weapons.size()]
@@ -130,9 +144,12 @@ func reset_weapons() -> void:
 	# 重新添加初始武器
 	add_weapon()
 	
-	# 重置所有武器的伤害到初始值
+	# 重置所有武器的加成属性到初始值
 	for weapon in weapons:
-		if weapon.has_method("reset_damage"):
+		if weapon.has_method("reset_bonuses"):
+			weapon.reset_bonuses()
+		elif weapon.has_method("reset_damage"):
+			# 兼容旧方法
 			weapon.reset_damage()
 
 # 设置最大生命值
