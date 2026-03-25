@@ -209,6 +209,9 @@ func new_game():
 
 	# 重置武器系统（射程、攻速、武器数量）
 	$Player.reset_weapons()
+	
+	# 重置速度到初始值
+	$Player.reset_speed()
 
 	$Player.start($StartPos.position)
 	

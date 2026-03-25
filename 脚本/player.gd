@@ -196,3 +196,7 @@ func increase_speed(amount: float) -> bool:
 # 获取当前速度
 func get_speed() -> float:
 	return speed
+
+# 重置速度到初始值
+func reset_speed() -> void:
+	speed = 300
