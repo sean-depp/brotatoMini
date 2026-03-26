@@ -6,6 +6,7 @@ extends RigidBody2D
 # 掉落物品场景引用
 @export var drop_item_scene: PackedScene
 @export var drop_magnet_scene: PackedScene
+@export var drop_health_scene: PackedScene
 
 # 怪物视觉节点组（仅动画）
 var mob_visuals: Array[AnimatedSprite2D] = []
@@ -69,6 +70,8 @@ func _ready():
 		drop_item_scene = load("res://子弹/drop_item.tscn")
 	if drop_magnet_scene == null:
 		drop_magnet_scene = load("res://子弹/drop_magnet.tscn")
+	if drop_health_scene == null:
+		drop_health_scene = load("res://子弹/drop_health.tscn")
 	
 	# 从 main.gd 传递的 mob_type 参数中获取怪物类型索引
 	# 如果没有传递，则随机选择（向后兼容）
@@ -223,22 +226,29 @@ func die() -> void:
 		
 # 掉落物品函数
 func _spawn_drop_item() -> void:
-	# 10% 概率掉落吸磁道具
-	var should_spawn_magnet = randf() < 0.1
+	# 掉落概率：金币70%，回血道具15%，吸磁道具5%，无掉落10%
+	var roll = randf()
 	
-	if should_spawn_magnet and drop_magnet_scene != null:
-		# 掉落吸磁道具
-		var magnet = drop_magnet_scene.instantiate()
-		magnet.global_position = global_position
-		magnet.add_to_group("magnets")
-		get_tree().get_root().call_deferred("add_child", magnet)
-	elif drop_item_scene != null:
-		# 掉落金币
-		var drop_item = drop_item_scene.instantiate()
-		drop_item.global_position = global_position
-		if not drop_item.is_in_group("drops"):
-			drop_item.add_to_group("drops")
-		get_tree().get_root().call_deferred("add_child", drop_item)
+	if roll < 0.05:  # 5% 概率掉落吸磁道具
+		if drop_magnet_scene != null:
+			var magnet = drop_magnet_scene.instantiate()
+			magnet.global_position = global_position
+			magnet.add_to_group("magnets")
+			get_tree().get_root().call_deferred("add_child", magnet)
+	elif roll < 0.20:  # 15% 概率掉落回血道具 (0.05-0.20)
+		if drop_health_scene != null:
+			var health_item = drop_health_scene.instantiate()
+			health_item.global_position = global_position
+			health_item.add_to_group("health_drops")
+			get_tree().get_root().call_deferred("add_child", health_item)
+	elif roll < 0.90:  # 70% 概率掉落金币 (0.20-0.90)
+		if drop_item_scene != null:
+			var drop_item = drop_item_scene.instantiate()
+			drop_item.global_position = global_position
+			if not drop_item.is_in_group("drops"):
+				drop_item.add_to_group("drops")
+			get_tree().get_root().call_deferred("add_child", drop_item)
+	# 10% 概率无掉落 (0.90-1.0)
 	
 func _physics_process(delta: float) -> void:
 	# 持续检查地图边界（2560x1440）
