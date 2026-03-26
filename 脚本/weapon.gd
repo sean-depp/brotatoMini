@@ -23,11 +23,14 @@ var damage_bonus: int = 0
 var fire_rate_bonus: float = 0.0
 # 射程加成
 var range_bonus: float = 0.0
+# 爆炸范围加成（用于榴弹枪等爆炸武器）
+var explosion_radius_bonus: float = 0.0
 
 # ==================== 属性上限 ====================
 @export var max_damage_bonus: int = 9  # 最大伤害加成（总伤害 = base_damage + damage_bonus，最高10）
 @export var max_fire_rate: float = 100.0  # 最大攻速（每秒100次）
 @export var max_range: float = 1000.0  # 最大射程
+@export var max_explosion_radius_bonus: float = 200.0  # 最大爆炸范围加成
 
 # ==================== 运行时变量 ====================
 var can_shoot = true
@@ -140,6 +143,9 @@ func shoot(target_pos: Variant = null) -> void:
 		bullet.direction = direction
 		# 传递武器伤害给子弹
 		bullet.damage = final_damage
+		# 传递爆炸范围加成给子弹（如果子弹支持）
+		if bullet.has_method("set_explosion_radius_bonus") or "explosion_radius_bonus" in bullet:
+			bullet.explosion_radius_bonus = explosion_radius_bonus
 		player.get_parent().add_child(bullet)
 
 	# 启动冷却
@@ -191,11 +197,23 @@ func increase_range(amount: float = 20.0) -> bool:
 	range_bonus = new_bonus
 	return true
 
+# 增加爆炸范围，返回是否成功（true 表示实际增加）
+func increase_explosion_radius(amount: float = 10.0) -> bool:
+	var new_bonus = explosion_radius_bonus + amount
+	if new_bonus > max_explosion_radius_bonus:
+		new_bonus = max_explosion_radius_bonus
+	# 若没有实际变化则返回 false
+	if is_equal_approx(new_bonus, explosion_radius_bonus):
+		return false
+	explosion_radius_bonus = new_bonus
+	return true
+
 # 重置所有加成属性到初始值
 func reset_bonuses() -> void:
 	damage_bonus = 0
 	fire_rate_bonus = 0.0
 	range_bonus = 0.0
+	explosion_radius_bonus = 0.0
 	# 更新计时器
 	if auto_shoot_timer != null:
 		auto_shoot_timer.wait_time = get_fire_interval()
@@ -213,6 +231,10 @@ func get_fire_rate_bonus() -> float:
 # 获取射程加成
 func get_range_bonus() -> float:
 	return range_bonus
+
+# 获取爆炸范围加成
+func get_explosion_radius_bonus() -> float:
+	return explosion_radius_bonus
 
 # ==================== 兼容旧API的方法 ====================
 # 返回当前自动射击射程（便于 UI 显示）

@@ -10,14 +10,21 @@ var direction: Vector2 = Vector2.RIGHT
 # 子弹伤害（由武器设置）
 var damage: int = 1
 
-# 爆炸半径
-@export var explosion_radius: float = 80.0
+# 爆炸半径（基础值）
+@export var base_explosion_radius: float = 80.0
+
+# 爆炸范围加成（由武器传递）
+var explosion_radius_bonus: float = 0.0
 
 # 爆炸伤害衰减（边缘伤害 = damage * damage_falloff）
 @export var damage_falloff: float = 0.5
 
 # 爆炸特效场景
 var explosion_effect_scene = preload("res://子弹/explosion_effect.tscn")
+
+# 获取最终爆炸半径（基础 + 加成）
+func get_explosion_radius() -> float:
+	return base_explosion_radius + explosion_radius_bonus
 
 func _ready():
 	# 连接body_entered信号，用于检测与怪物的碰撞
@@ -45,13 +52,16 @@ func _on_body_entered(body: Node2D) -> void:
 
 # 爆炸函数：对范围内所有怪物造成伤害
 func explode() -> void:
+	# 获取最终爆炸半径
+	var final_explosion_radius = get_explosion_radius()
+	
 	# 获取爆炸范围内的所有节点
 	var space_state = get_world_2d().direct_space_state
 	var query = PhysicsShapeQueryParameters2D.new()
 	
 	# 创建圆形碰撞形状用于检测
 	var circle_shape = CircleShape2D.new()
-	circle_shape.radius = explosion_radius
+	circle_shape.radius = final_explosion_radius
 	
 	query.shape = circle_shape
 	query.transform = Transform2D(0, global_position)
@@ -72,7 +82,7 @@ func explode() -> void:
 		if mob.has_method("take_damage") and is_instance_valid(mob):
 			var distance = global_position.distance_to(mob.global_position)
 			# 计算伤害：距离越远伤害越低
-			var damage_multiplier = 1.0 - (distance / explosion_radius) * (1.0 - damage_falloff)
+			var damage_multiplier = 1.0 - (distance / final_explosion_radius) * (1.0 - damage_falloff)
 			var final_damage = max(1, int(damage * damage_multiplier))
 			mob.take_damage(final_damage)
 	
@@ -80,7 +90,7 @@ func explode() -> void:
 	if explosion_effect_scene != null:
 		var effect = explosion_effect_scene.instantiate()
 		effect.global_position = global_position
-		effect.radius = explosion_radius  # 传递爆炸半径
+		effect.radius = final_explosion_radius  # 传递爆炸半径
 		get_tree().get_root().add_child(effect)
 	
 	# 销毁子弹

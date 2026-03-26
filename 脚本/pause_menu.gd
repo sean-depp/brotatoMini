@@ -21,31 +21,49 @@ func update_value_labels() -> void:
 	# Player -> Weapon 的数值（显示加成值，初始为0）
 	if cur_scene.has_node("Player"):
 		var player = cur_scene.get_node("Player")
+		
+		# 更新武器数显示（无论是否有武器都要更新）
+		if has_node("MainContainer/RightPanel/StatsVBox/WeaponValue"):
+			get_node("MainContainer/RightPanel/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
+		
+		# 查找第一个武器用于显示属性
+		var first_weapon = null
 		for child in player.get_children():
 			if child is Weapon:
-				var weapon = child
-				# 显示射程加成
-				if has_node("MainContainer/RightPanel/StatsVBox/RangeValue") and weapon.has_method("get_range_bonus"):
-					get_node("MainContainer/RightPanel/StatsVBox/RangeValue").text = "射程: %d" % int(weapon.get_range_bonus())
-				# 显示攻速加成（每秒攻击次数的增加值）
-				if has_node("MainContainer/RightPanel/StatsVBox/FireValue") and weapon.has_method("get_fire_rate_bonus"):
-					get_node("MainContainer/RightPanel/StatsVBox/FireValue").text = "攻速: %.1f" % weapon.get_fire_rate_bonus()
-				if has_node("MainContainer/RightPanel/StatsVBox/WeaponValue"):
-					get_node("MainContainer/RightPanel/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
-				# 只处理第一个找到的 Weapon
+				first_weapon = child
 				break
+		
+		# 更新射程显示
+		if has_node("MainContainer/RightPanel/StatsVBox/RangeValue"):
+			if first_weapon and first_weapon.has_method("get_range_bonus"):
+				get_node("MainContainer/RightPanel/StatsVBox/RangeValue").text = "射程: %d" % int(first_weapon.get_range_bonus())
+			else:
+				get_node("MainContainer/RightPanel/StatsVBox/RangeValue").text = "射程: 0"
+		
+		# 更新攻速显示
+		if has_node("MainContainer/RightPanel/StatsVBox/FireValue"):
+			if first_weapon and first_weapon.has_method("get_fire_rate_bonus"):
+				get_node("MainContainer/RightPanel/StatsVBox/FireValue").text = "攻速: %.1f" % first_weapon.get_fire_rate_bonus()
+			else:
+				get_node("MainContainer/RightPanel/StatsVBox/FireValue").text = "攻速: 0.0"
 		
 		# 更新速度显示
 		if has_node("MainContainer/RightPanel/StatsVBox/SpeedValue") and player.has_method("get_speed"):
 			get_node("MainContainer/RightPanel/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
 		
-		# 更新伤害加成显示（取第一个武器的伤害加成值）
+		# 更新伤害加成显示
 		if has_node("MainContainer/RightPanel/StatsVBox/DamageValue"):
-			for child in player.get_children():
-				if child is Weapon:
-					if child.has_method("get_damage_bonus"):
-						get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: %d" % child.get_damage_bonus()
-					break
+			if first_weapon and first_weapon.has_method("get_damage_bonus"):
+				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: %d" % first_weapon.get_damage_bonus()
+			else:
+				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: 0"
+		
+		# 更新爆炸范围加成显示
+		if has_node("MainContainer/RightPanel/StatsVBox/ExplosionValue"):
+			if first_weapon and first_weapon.has_method("get_explosion_radius_bonus"):
+				get_node("MainContainer/RightPanel/StatsVBox/ExplosionValue").text = "爆炸范围: %d" % int(first_weapon.get_explosion_radius_bonus())
+			else:
+				get_node("MainContainer/RightPanel/StatsVBox/ExplosionValue").text = "爆炸范围: 0"
 
 func _on_buy_button_pressed() -> void:
 	var cur_scene = get_tree().get_current_scene()
@@ -290,6 +308,42 @@ func _on_damage_button_pressed() -> void:
 						return
 					else:
 						hud.show_message("伤害已达上限！")
+						return
+			else:
+				hud.show_message("金币不足！")
+
+func _on_explosion_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检测金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 10:
+				# 尝试找到 Player 的所有武器并一次性升级爆炸范围（成功则只扣一次金币）
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					var found = false
+					var any_upgraded = false
+					for child in player.get_children():
+						if typeof(child) == TYPE_OBJECT and child.has_method("increase_explosion_radius"):
+							found = true
+							if child.increase_explosion_radius(10.0):
+								any_upgraded = true
+							else:
+								any_upgraded = false
+								
+					if not found:
+						hud.show_message("未找到武器！")
+						return
+					if any_upgraded:
+						main.score -= 10
+						hud.update_score(main.score)
+						update_value_labels()
+						return
+					else:
+						hud.show_message("爆炸范围已达上限！")
 						return
 			else:
 				hud.show_message("金币不足！")
