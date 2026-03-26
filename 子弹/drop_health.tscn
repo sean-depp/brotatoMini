@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://48bavjtax74k"]
 
-[ext_resource type="Script" uid="uid://cl74etfxrwwi5" path="res://脚本/drop_health.gd" id="1_health"]
+[ext_resource type="Script" uid="uid://baabroshwed1i" path="res://脚本/Drop/drop_health.gd" id="1_health"]
 [ext_resource type="Texture2D" uid="uid://jkbnq2rt3ytc" path="res://资源/art/health/redf.png" id="2_pvqp4"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_health"]

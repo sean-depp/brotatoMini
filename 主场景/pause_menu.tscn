@@ -295,8 +295,8 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 16
-text = "伤害:1 攻速:1.0
-射程:150 子弹:3"
+text = "伤害:2 攻速:1.0
+射程:150 子弹:5"
 horizontal_alignment = 1
 
 [node name="ShotgunPrice" type="Label" parent="MainContainer/LeftPanel/WeaponShopGrid/ShotgunVBox"]
@@ -331,8 +331,8 @@ custom_minimum_size = Vector2(0, 50)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 16
-text = "伤害:3 攻速:0.83
-射程:250 爆炸:80"
+text = "伤害:1 攻速:0.67
+射程:300 爆炸:80"
 horizontal_alignment = 1
 
 [node name="GrenadeLauncherPrice" type="Label" parent="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox"]

@@ -199,6 +199,7 @@ func new_game():
 	get_tree().call_group("mobs", "queue_free")
 	get_tree().call_group("drops", "queue_free")
 	get_tree().call_group("magnets", "queue_free")
+	get_tree().call_group("health_drops", "queue_free")
 	get_tree().call_group("mob_bullets", "queue_free")
 	
 	score = 40

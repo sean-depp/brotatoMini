@@ -1,15 +1,8 @@
-extends Area2D
-class_name GrenadeBullet
+extends "res://脚本/Weapon/bullet_base.gd"
 
-# 子弹速度
-@export var speed: float = 400.0
+# 榴弹子弹：击中后爆炸，造成范围伤害
 
-# 子弹方向
-var direction: Vector2 = Vector2.RIGHT
-
-# 子弹伤害（由武器设置）
-var damage: int = 1
-
+# ==================== 榴弹特有属性 ====================
 # 爆炸半径（基础值）
 @export var base_explosion_radius: float = 80.0
 
@@ -22,33 +15,24 @@ var explosion_radius_bonus: float = 0.0
 # 爆炸特效场景
 var explosion_effect_scene = preload("res://子弹/explosion_effect.tscn")
 
+func _ready():
+	super._ready()
+	# 榴弹类型
+	bullet_type = BulletType.GRENADE
+	# 榴弹速度较慢
+	speed = 400.0
+
+# 击中目标时的处理（重写父类方法）
+func _on_hit_target(_target: Node2D) -> void:
+	explode()
+
+# 击中其他物体时的处理（重写父类方法）
+func _on_hit_other(_body: Node2D) -> void:
+	explode()
+
 # 获取最终爆炸半径（基础 + 加成）
 func get_explosion_radius() -> float:
 	return base_explosion_radius + explosion_radius_bonus
-
-func _ready():
-	# 连接body_entered信号，用于检测与怪物的碰撞
-	connect("body_entered", Callable(self, "_on_body_entered"))
-	
-	# 根据给定方向设置朝向（贴图默认朝右）
-	rotation = direction.angle()
-
-func _physics_process(delta: float) -> void:
-	# 根据方向和速度移动子弹
-	position += direction * speed * delta
-
-# 当子弹离开屏幕时销毁
-func _on_visible_on_screen_notifier_2d_screen_exited() -> void:
-	queue_free()
-
-# 当子弹碰到物体时的处理
-func _on_body_entered(body: Node2D) -> void:
-	# 如果碰到的是怪物，触发爆炸
-	if body.is_in_group("mobs"):
-		explode()
-	# 如果碰到其他物体（墙壁等），也触发爆炸
-	else:
-		explode()
 
 # 爆炸函数：对范围内所有怪物造成伤害
 func explode() -> void:
@@ -83,7 +67,7 @@ func explode() -> void:
 			var distance = global_position.distance_to(mob.global_position)
 			# 计算伤害：距离越远伤害越低
 			var damage_multiplier = 1.0 - (distance / final_explosion_radius) * (1.0 - damage_falloff)
-			var final_damage = max(1, int(damage * damage_multiplier))
+			var final_damage = max(1.0, damage * damage_multiplier)  # 保持浮点数
 			mob.take_damage(final_damage)
 	
 	# 生成爆炸特效

@@ -51,12 +51,14 @@ func update_value_labels() -> void:
 		if has_node("MainContainer/RightPanel/StatsVBox/SpeedValue") and player.has_method("get_speed"):
 			get_node("MainContainer/RightPanel/StatsVBox/SpeedValue").text = "速度: %d" % int(player.get_speed())
 		
-		# 更新伤害加成显示
+		# 更新伤害加成显示（显示为百分比加成）
 		if has_node("MainContainer/RightPanel/StatsVBox/DamageValue"):
 			if first_weapon and first_weapon.has_method("get_damage_bonus"):
-				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: %d" % first_weapon.get_damage_bonus()
+				var bonus = first_weapon.get_damage_bonus()
+				var percent = bonus * 10  # 每点加成10%
+				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: +%d%%" % percent
 			else:
-				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: 0"
+				get_node("MainContainer/RightPanel/StatsVBox/DamageValue").text = "伤害: +0%"
 		
 		# 更新爆炸范围加成显示
 		if has_node("MainContainer/RightPanel/StatsVBox/ExplosionValue"):

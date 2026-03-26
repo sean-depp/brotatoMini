@@ -1,4 +1,4 @@
-extends "res://脚本/drop_base.gd"
+extends "res://脚本/Drop/drop_base.gd"
 
 # 金币掉落物：玩家拾取后获得1金币
 

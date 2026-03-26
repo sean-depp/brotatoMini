@@ -9,7 +9,7 @@ extends RigidBody2D
 @export var drop_health_scene: PackedScene
 
 # 引用掉落物基类脚本
-const DropBase = preload("res://脚本/drop_base.gd")
+const DropBase = preload("res://脚本/Drop/drop_base.gd")
 
 # 怪物视觉节点组（仅动画）
 var mob_visuals: Array[AnimatedSprite2D] = []
@@ -27,9 +27,9 @@ var player: Node2D
 # 当前怪物类型索引
 var mob_type_index: int = 0
 
-# 血量系统
-var max_health: int = 1
-var current_health: int = 1
+# 血量系统（浮点型，支持百分比伤害）
+var max_health: float = 1.0
+var current_health: float = 1.0
 var health_bar: Control
 var health_bar_fill: ColorRect
 var health_bar_bg: ColorRect
@@ -185,8 +185,8 @@ func change_direction():
 	# 2. 用相同的增量旋转速度向量（关键：使用增量而非绝对角度）
 	linear_velocity = linear_velocity.rotated(direction_delta)
 
-# 怪物受伤函数
-func take_damage(amount: int) -> void:
+# 怪物受伤函数（支持浮点型伤害）
+func take_damage(amount: float) -> void:
 	current_health -= amount
 	
 	# 更新血条显示

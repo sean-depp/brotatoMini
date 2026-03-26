@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://c7r6rxsq05grr"]
 
-[ext_resource type="Script" uid="uid://dd34jqgt5iot6" path="res://脚本/grenade_bullet.gd" id="1_grenade"]
+[ext_resource type="Script" uid="uid://jrkt0rdrqekg" path="res://脚本/Weapon/grenade_bullet.gd" id="1_grenade"]
 [ext_resource type="Texture2D" uid="uid://wd6i25wlw7yo" path="res://资源/art/Laser Sprites/14.png" id="2_8ci2n"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_grenade"]

@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://bxhbcrvt3skiq"]
 
-[ext_resource type="Script" uid="uid://dj2p0egnw77ii" path="res://脚本/drop_magnet.gd" id="1_magnet"]
+[ext_resource type="Script" uid="uid://wovn48rljal3" path="res://脚本/Drop/drop_magnet.gd" id="1_magnet"]
 [ext_resource type="Texture2D" uid="uid://dyi4lyfb2c8oc" path="res://资源/art/coin/magnet.png" id="2_n324i"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_1"]

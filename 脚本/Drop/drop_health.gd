@@ -1,4 +1,4 @@
-extends "res://脚本/drop_base.gd"
+extends "res://脚本/Drop/drop_base.gd"
 
 # 回血道具：玩家拾取后恢复2点生命值
 

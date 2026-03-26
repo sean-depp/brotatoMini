@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://mm3jvqyhy0b1"]
 
-[ext_resource type="Script" uid="uid://bwpiti37a8jb1" path="res://脚本/weapon.gd" id="1_weapon"]
+[ext_resource type="Script" uid="uid://dqg8quiw2t6r1" path="res://脚本/Weapon/weapon.gd" id="1_weapon"]
 [ext_resource type="PackedScene" path="res://子弹/grenade_bullet.tscn" id="2_bullet"]
 [ext_resource type="Texture2D" uid="uid://dwttnjrmmllyy" path="res://资源/art/Tiny Gun Pack/06.png" id="3_ibcww"]
 
