@@ -7,9 +7,10 @@
 [node name="GrenadeLauncher" type="Node2D" unique_id=1548854886]
 script = ExtResource("1_weapon")
 bullet_scene = ExtResource("2_bullet")
-base_damage = 3
-base_fire_interval = 1.2
-base_range = 250.0
+weapon_type = 2
+base_damage = 1
+base_fire_interval = 1.5
+base_range = 300.0
 
 [node name="Handle" type="Node2D" parent="." unique_id=957182311]
 

@@ -50,19 +50,24 @@ func explode() -> void:
 	query.shape = circle_shape
 	query.transform = Transform2D(0, global_position)
 	query.collision_mask = 1  # 怪物在碰撞层1
+	query.collide_with_areas = false
+	query.collide_with_bodies = true
 	
 	# 查询范围内的所有碰撞体
-	var results = space_state.intersect_shape(query)
+	var results = space_state.intersect_shape(query, 32)  # 限制最大结果数
 	
-	# 收集所有被击中的怪物（去重）
-	var hit_mobs: Array = []
+	# 收集所有被击中的怪物（使用字典去重，key为怪物实例ID）
+	var hit_mobs: Dictionary = {}
 	for result in results:
 		var collider = result.get("collider")
-		if collider != null and collider.is_in_group("mobs") and not hit_mobs.has(collider):
-			hit_mobs.append(collider)
+		if collider != null and collider.is_in_group("mobs"):
+			var collider_id = collider.get_instance_id()
+			if not hit_mobs.has(collider_id):
+				hit_mobs[collider_id] = collider
 	
 	# 对每个怪物造成伤害（根据距离计算伤害衰减）
-	for mob in hit_mobs:
+	for mob_id in hit_mobs:
+		var mob = hit_mobs[mob_id]
 		if mob.has_method("take_damage") and is_instance_valid(mob):
 			var distance = global_position.distance_to(mob.global_position)
 			# 计算伤害：距离越远伤害越低

@@ -80,9 +80,12 @@ func _ready():
 	# 如果没有传递，则随机选择（向后兼容）
 	if has_meta("mob_type"):
 		mob_type_index = get_meta("mob_type")
+		# 确保索引在有效范围内（只使用 mob1, mob2, mob3）
+		if mob_type_index < 0 or mob_type_index > 2:
+			mob_type_index = 0  # 默认使用 mob1
 	else:
-		var random_index = randi() % mob_visuals.size()
-		mob_type_index = random_index
+		# 如果没有设置元数据，只随机选择 mob1, mob2, mob3（索引 0-2）
+		mob_type_index = randi() % 3
 	
 	# 隐藏所有视觉节点和碰撞形状
 	for visual in mob_visuals:
@@ -133,8 +136,9 @@ func _setup_weapon(mob_type_index: int) -> void:
 	# 从配置中获取该怪物类型的攻击参数
 	if mob_weapon_configs.has(mob_type_index):
 		var config = mob_weapon_configs[mob_type_index]
-		weapon.min_fire_rate = config["min_fire_rate"]
-		weapon.max_fire_rate = config["max_fire_rate"]
+		# 使用 set 方法设置属性，避免类型转换问题
+		weapon.set("min_fire_rate", config["min_fire_rate"])
+		weapon.set("max_fire_rate", config["max_fire_rate"])
 
 # 为指定的怪物类型设置血量
 func _setup_health(mob_type_index: int) -> void:

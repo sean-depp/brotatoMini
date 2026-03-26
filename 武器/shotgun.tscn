@@ -7,9 +7,11 @@
 [node name="Shotgun" type="Node2D" unique_id=239847361]
 script = ExtResource("1_weapon")
 bullet_scene = ExtResource("2_bullet")
+weapon_type = 1
+base_damage = 2
 base_fire_interval = 1.0
 base_range = 150.0
-bullet_count = 3
+bullet_count = 5
 spread_angle = 15.0
 
 [node name="Handle" type="Node2D" parent="." unique_id=402303161]

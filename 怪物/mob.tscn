@@ -1,6 +1,6 @@
 [gd_scene load_steps=58 format=3 uid="uid://id3ft7dcv3bd"]
 
-[ext_resource type="Script" uid="uid://cjbimpyv5ocd0" path="res://脚本/mob.gd" id="1_4fuhe"]
+[ext_resource type="Script" uid="uid://cjbimpyv5ocd0" path="res://脚本/Mob/mob.gd" id="1_4fuhe"]
 [ext_resource type="Texture2D" uid="uid://enucxt18dsga" path="res://资源/art/mob/03.Spookmoth/FlySpookmoth.png" id="6_nkrtp"]
 [ext_resource type="Texture2D" uid="uid://bv28cgd2mipeb" path="res://资源/art/mob/04.Spora/IdleSpora.png" id="7_dbq3k"]
 [ext_resource type="Texture2D" uid="uid://770a0ebhgjp8" path="res://资源/art/mob/04.Spora/MoveSpora.png" id="8_dic75"]
