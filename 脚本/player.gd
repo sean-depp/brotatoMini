@@ -105,10 +105,8 @@ func under_hurt() -> void:
 	
 	#hide() # Player disappears after being hit.
 	hit.emit()
-	# Must be deferred as we can't change physics properties on a physics callback.
-	# 如果在引擎的碰撞处理过程中禁用区域的碰撞形状可能会导致错误。
-	# 使用 set_deferred() 告诉 Godot 等待可以安全地禁用形状时再这样做。
-	$CollisionShape2D.set_deferred("disabled", true)
+	# 注意：不再禁用碰撞形状，这样玩家在无敌状态期间仍然可以拾取掉落物
+	# 无敌状态只防止受伤，不影响拾取道具
 	
 	# 启动无敌状态和闪烁效果
 	is_invincible = true
