@@ -1,23 +1,20 @@
-extends Area2D
+extends "res://脚本/drop_base.gd"
 
-func _ready():
-	# 连接与玩家的碰撞信号（Area2D 之间的碰撞使用 area_entered）
-	connect("area_entered", Callable(self, "_on_area_entered"))
+# 金币掉落物：玩家拾取后获得1金币
+
+func _on_pickup(_player: Node) -> void:
+	# 检查是否正在被吸磁动画处理
+	if has_meta("animating"):
+		return
 	
-func _on_area_entered(area):
-	# 检查碰撞对象是否为玩家
-	if area.is_in_group("player") and not has_meta("animating"):
-		# 触发增加金币数：通过主场景的 add_score 方法统一处理
-		var main = get_tree().get_current_scene()
-		if main and main.has_method("add_score"):
-			main.add_score(1)
-		else:
-			# 作为回退（极少使用）：直接访问主节点的 score 并更新 HUD
-			if main:
-				if "score" in main:
-					main.score += 1
-					if main.has_node("HUD"):
-						main.get_node("HUD").update_score(main.score)
-		# 销毁拾取物
-		queue_free()
-		
+	# 增加金币数：通过主场景的 add_score 方法统一处理
+	var main = _get_main()
+	if main and main.has_method("add_score"):
+		main.add_score(1)
+	else:
+		# 作为回退：直接访问主节点的 score 并更新 HUD
+		if main and "score" in main:
+			main.score += 1
+			var hud = _get_hud()
+			if hud and hud.has_method("update_score"):
+				hud.update_score(main.score)

@@ -3,10 +3,13 @@ extends RigidBody2D
 # 武器场景引用
 @export var weapon_scene: PackedScene
 
-# 掉落物品场景引用
+# 掉落物品场景引用（可选，使用 DropBase 的静态方法时不需要）
 @export var drop_item_scene: PackedScene
 @export var drop_magnet_scene: PackedScene
 @export var drop_health_scene: PackedScene
+
+# 引用掉落物基类脚本
+const DropBase = preload("res://脚本/drop_base.gd")
 
 # 怪物视觉节点组（仅动画）
 var mob_visuals: Array[AnimatedSprite2D] = []
@@ -224,31 +227,13 @@ func die() -> void:
 		# 没有动画直接删除
 		queue_free()
 		
-# 掉落物品函数
+# 掉落物品函数（使用 DropBase 的静态方法）
 func _spawn_drop_item() -> void:
-	# 掉落概率：金币70%，回血道具15%，吸磁道具5%，无掉落10%
-	var roll = randf()
+	# 使用 DropBase 的静态方法根据概率随机选择掉落物类型
+	var drop_type = DropBase.roll_drop_type()
 	
-	if roll < 0.05:  # 5% 概率掉落吸磁道具
-		if drop_magnet_scene != null:
-			var magnet = drop_magnet_scene.instantiate()
-			magnet.global_position = global_position
-			magnet.add_to_group("magnets")
-			get_tree().get_root().call_deferred("add_child", magnet)
-	elif roll < 0.20:  # 15% 概率掉落回血道具 (0.05-0.20)
-		if drop_health_scene != null:
-			var health_item = drop_health_scene.instantiate()
-			health_item.global_position = global_position
-			health_item.add_to_group("health_drops")
-			get_tree().get_root().call_deferred("add_child", health_item)
-	elif roll < 0.90:  # 70% 概率掉落金币 (0.20-0.90)
-		if drop_item_scene != null:
-			var drop_item = drop_item_scene.instantiate()
-			drop_item.global_position = global_position
-			if not drop_item.is_in_group("drops"):
-				drop_item.add_to_group("drops")
-			get_tree().get_root().call_deferred("add_child", drop_item)
-	# 10% 概率无掉落 (0.90-1.0)
+	# 在当前位置生成掉落物
+	DropBase.spawn_drop(drop_type, global_position)
 	
 func _physics_process(delta: float) -> void:
 	# 持续检查地图边界（2560x1440）
