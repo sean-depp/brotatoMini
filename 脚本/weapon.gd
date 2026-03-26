@@ -144,7 +144,7 @@ func shoot(target_pos: Variant = null) -> void:
 		# 传递武器伤害给子弹
 		bullet.damage = final_damage
 		# 传递爆炸范围加成给子弹（如果子弹支持）
-		if bullet.has_method("set_explosion_radius_bonus") or "explosion_radius_bonus" in bullet:
+		if "explosion_radius_bonus" in bullet:
 			bullet.explosion_radius_bonus = explosion_radius_bonus
 		player.get_parent().add_child(bullet)
 

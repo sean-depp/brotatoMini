@@ -109,9 +109,7 @@ func _on_fire_rate_button_pressed() -> void:
 						if typeof(child) == TYPE_OBJECT and child.has_method("decrease_auto_shoot_interval"):
 							found = true
 							if child.decrease_auto_shoot_interval(0.01):
-								any_upgraded = true
-							else:
-								any_upgraded = false
+								any_upgraded = true  # 只要有任何一个武器升级成功就标记为成功
 
 					# 没有找到任何武器
 					if not found:
@@ -148,9 +146,7 @@ func _on_range_button_pressed() -> void:
 						if typeof(child) == TYPE_OBJECT and child.has_method("increase_auto_shoot_range"):
 							found = true
 							if child.increase_auto_shoot_range(20.0):
-								any_upgraded = true
-							else:
-								any_upgraded = false
+								any_upgraded = true  # 只要有任何一个武器升级成功就标记为成功
 								
 					if not found:
 						hud.show_message("未找到武器！")
@@ -300,9 +296,7 @@ func _on_damage_button_pressed() -> void:
 						if typeof(child) == TYPE_OBJECT and child.has_method("increase_damage"):
 							found = true
 							if child.increase_damage(1):
-								any_upgraded = true
-							else:
-								any_upgraded = false
+								any_upgraded = true  # 只要有任何一个武器升级成功就标记为成功
 								
 					if not found:
 						hud.show_message("未找到武器！")
@@ -336,9 +330,7 @@ func _on_explosion_button_pressed() -> void:
 						if typeof(child) == TYPE_OBJECT and child.has_method("increase_explosion_radius"):
 							found = true
 							if child.increase_explosion_radius(10.0):
-								any_upgraded = true
-							else:
-								any_upgraded = false
+								any_upgraded = true  # 只要有任何一个武器升级成功就标记为成功
 								
 					if not found:
 						hud.show_message("未找到武器！")
