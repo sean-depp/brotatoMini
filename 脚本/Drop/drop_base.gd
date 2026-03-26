@@ -9,6 +9,7 @@ enum DropType {
 	COIN,       # 金币
 	HEALTH,     # 回血道具
 	MAGNET,     # 吸磁道具
+	CHEST,      # 宝箱
 }
 
 # 掉落物配置：类型 -> {scene_path, group_name, probability}
@@ -16,7 +17,7 @@ const DROP_CONFIG := {
 	DropType.COIN: {
 		"scene_path": "res://子弹/drop_item.tscn",
 		"group_name": "drops",
-		"probability": 0.70,  # 70% 概率
+		"probability": 0.65,  # 65% 概率
 	},
 	DropType.HEALTH: {
 		"scene_path": "res://子弹/drop_health.tscn",
@@ -26,6 +27,11 @@ const DROP_CONFIG := {
 	DropType.MAGNET: {
 		"scene_path": "res://子弹/drop_magnet.tscn",
 		"group_name": "magnets",
+		"probability": 0.05,  # 5% 概率
+	},
+	DropType.CHEST: {
+		"scene_path": "res://子弹/drop_chest.tscn",
+		"group_name": "chests",
 		"probability": 0.05,  # 5% 概率
 	},
 }

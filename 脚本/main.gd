@@ -201,6 +201,7 @@ func new_game():
 	get_tree().call_group("magnets", "queue_free")
 	get_tree().call_group("health_drops", "queue_free")
 	get_tree().call_group("mob_bullets", "queue_free")
+	get_tree().call_group("chests", "queue_free")  # 清理宝箱
 	
 	score = 40
 	

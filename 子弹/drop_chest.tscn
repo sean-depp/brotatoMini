@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://c8y4erulgvgnc"]
+
+[ext_resource type="Script" uid="uid://bob8rulsptf3x" path="res://脚本/Drop/drop_chest.gd" id="1_chest"]
+[ext_resource type="Texture2D" uid="uid://c3b23hg43civw" path="res://资源/art/chest/72.png" id="2_whntw"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_chest"]
+radius = 15.0
+
+[node name="DropChest" type="Area2D"]
+script = ExtResource("1_chest")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=44092990]
+scale = Vector2(0.5, 0.5)
+texture = ExtResource("2_whntw")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="."]
+shape = SubResource("CircleShape2D_chest")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+scale = Vector2(1.4, 1.4)
