@@ -90,38 +90,38 @@ func _setup_health_bar() -> void:
 	# 将血条添加到HUD节点
 	add_child(health_bar)
 
-# 更新血条显示
-func update_health_bar(current: int, max_val: int) -> void:
+# 更新血条显示（支持浮点类型）
+func update_health_bar(current: float, max_val: float) -> void:
 	if health_bar_fill != null and is_instance_valid(health_bar_fill):
 		# 计算血条宽度比例
-		var health_ratio = float(current) / float(max_val)
+		var health_ratio = current / max_val
 		# 更新血条前景宽度
 		health_bar_fill.size.x = 200.0 * health_ratio
 	
-	# 更新血量标签
+	# 更新血量标签（显示一位小数）
 	if health_label != null and is_instance_valid(health_label):
-		health_label.text = "%d/%d" % [current, max_val]
+		health_label.text = "%.1f/%.1f" % [current, max_val]
 
 func set_full_health():
 	if health_bar_fill != null and is_instance_valid(health_bar_fill):
 		health_bar_fill.size.x = 200.0
 
 # 获取玩家当前血量
-func get_health() -> int:
+func get_health() -> float:
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.has_method("get_health"):
 		return player.get_health()
-	return 0
+	return 0.0
 
 # 获取玩家最大血量
-func get_max_health() -> int:
+func get_max_health() -> float:
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.has_method("get_max_health"):
 		return player.get_max_health()
-	return 0
+	return 0.0
 
 # 增加最大血量
-func add_max_health(amount: int) -> bool:
+func add_max_health(amount: float) -> bool:
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.has_method("get_max_health"):
 		var current_max = player.get_max_health()
@@ -135,7 +135,7 @@ func add_max_health(amount: int) -> bool:
 	return false
 
 # 恢复血量
-func heal_health(amount: int) -> bool:
+func heal_health(amount: float) -> bool:
 	var player = get_tree().get_first_node_in_group("player")
 	if player and player.has_method("get_health") and player.has_method("get_max_health"):
 		var current = player.get_health()

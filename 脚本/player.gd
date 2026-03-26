@@ -6,10 +6,13 @@ signal hit
 @export var max_speed = 1000 # 最大速度限制
 var screen_size # Size of the game window.
 
-# 血量系统（数值型血条）
-var max_health: int = 1
-var current_health: int = 1
+# 血量系统（浮点型血条）
+var max_health: float = 5.0
+var current_health: float = 5.0
 var is_dead: bool = false
+
+# 防御系统（防御值，每点防御减少10%伤害）
+var defense: float = 0.0
 
 # 无敌状态闪烁
 var is_invincible: bool = false
@@ -181,13 +184,13 @@ func reset_weapons() -> void:
 	# 不再自动添加初始武器，玩家需要购买武器
 
 # 设置最大生命值
-func set_max_health(new_max: int) -> void:
+func set_max_health(new_max: float) -> void:
 	max_health = new_max
 	if current_health > max_health:
 		current_health = max_health
 
 # 设置当前生命值
-func set_health(health: int) -> void:
+func set_health(health: float) -> void:
 	if health < 0:
 		health = 0
 	if health > max_health:
@@ -195,27 +198,52 @@ func set_health(health: int) -> void:
 	current_health = health
 
 # 增加生命值
-func add_health(amount: int) -> void:
+func add_health(amount: float) -> void:
 	set_health(current_health + amount)
 
 # 减少生命值
-func subtract_health(amount: int) -> void:
+func subtract_health(amount: float) -> void:
 	set_health(current_health - amount)
 
 # 获取当前生命值
-func get_health() -> int:
+func get_health() -> float:
 	return current_health
 
 # 获取最大生命值
-func get_max_health() -> int:
+func get_max_health() -> float:
 	return max_health
 
+# 获取防御值
+func get_defense() -> float:
+	return defense
+
+# 增加防御值
+func increase_defense(amount: float) -> bool:
+	defense += amount
+	return true
+
+# 重置防御值
+func reset_defense() -> void:
+	defense = 0.0
+
+# 计算实际伤害（应用防御减伤）
+func calculate_damage(base_damage: float) -> float:
+	# 防御值每点减少2%伤害（5防御值 = 10%减伤）
+	# 例如：防御值1 = 减少2%伤害，防御值5 = 减少10%伤害
+	var damage_reduction = defense * 0.02
+	# 限制最大减伤为90%
+	damage_reduction = min(damage_reduction, 0.9)
+	var actual_damage = base_damage * (1.0 - damage_reduction)
+	return actual_damage
+
 # 玩家受伤函数
-func take_damage(amount: int) -> void:
+func take_damage(amount: float) -> void:
 	if is_dead:
 		return
 	
-	current_health -= amount
+	# 应用防御减伤
+	var actual_damage = calculate_damage(amount)
+	current_health -= actual_damage
 	
 	# 检查是否死亡
 	if current_health <= 0:

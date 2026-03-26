@@ -64,6 +64,12 @@ func update_value_labels() -> void:
 				get_node("MainContainer/RightPanel/StatsVBox/ExplosionValue").text = "爆炸范围: %d" % int(first_weapon.get_explosion_radius_bonus())
 			else:
 				get_node("MainContainer/RightPanel/StatsVBox/ExplosionValue").text = "爆炸范围: 0"
+		
+		# 更新防御值显示
+		if has_node("MainContainer/RightPanel/StatsVBox/DefenseValue") and player.has_method("get_defense"):
+			var defense = player.get_defense()
+			var damage_reduction = min(defense * 2, 90)  # 每点防御减少2%伤害，最高90%
+			get_node("MainContainer/RightPanel/StatsVBox/DefenseValue").text = "防御: %d (%d%%减伤)" % [int(defense), damage_reduction]
 
 func _on_buy_button_pressed() -> void:
 	var cur_scene = get_tree().get_current_scene()
@@ -345,5 +351,32 @@ func _on_explosion_button_pressed() -> void:
 					else:
 						hud.show_message("爆炸范围已达上限！")
 						return
+			else:
+				hud.show_message("金币不足！")
+
+func _on_defense_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检测金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 5:
+				# 尝试增加防御值
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					if player.has_method("increase_defense"):
+						# 检查防御值上限（最高9点，90%减伤）
+						if player.get_defense() >= 9:
+							hud.show_message("防御已达上限！")
+							return
+						player.increase_defense(1.0)
+						main.score -= 5
+						hud.update_score(main.score)
+						update_value_labels()
+						hud.show_message("购买防御成功！")
+					else:
+						hud.show_message("无法增加防御！")
 			else:
 				hud.show_message("金币不足！")

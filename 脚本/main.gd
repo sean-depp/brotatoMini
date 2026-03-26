@@ -29,6 +29,9 @@ func _ready() -> void:
 	
 	# 绘制地图边界
 	_draw_map_boundary()
+	
+	# 初始化HUD血条显示（显示玩家初始血量）
+	$HUD.update_health_bar($Player.get_health(), $Player.get_max_health())
 
 func _on_pause_toggle_requested():
 	if not running:
@@ -200,18 +203,21 @@ func new_game():
 	
 	score = 40
 	
-	# 设置玩家的血量（数值型血条系统）
-	$Player.set_max_health(1)
-	$Player.set_health(1)
+	# 设置玩家的血量（浮点型血条系统）
+	$Player.set_max_health(5.0)
+	$Player.set_health(5.0)
 	
 	# 更新HUD血条显示
-	$HUD.update_health_bar(1, 1)
+	$HUD.update_health_bar($Player.get_health(), $Player.get_max_health())
 
 	# 重置武器系统（射程、攻速、武器数量）
 	$Player.reset_weapons()
 	
 	# 重置速度到初始值
 	$Player.reset_speed()
+	
+	# 重置防御值
+	$Player.reset_defense()
 
 	$Player.start($StartPos.position)
 	
