@@ -203,6 +203,13 @@ func new_game():
 	get_tree().call_group("mob_bullets", "queue_free")
 	get_tree().call_group("chests", "queue_free")  # 清理宝箱
 	
+	# 清理怪物生成标记和定时器
+	get_tree().call_group("marker_visuals", "queue_free")
+	# 清理所有 SpawnTimer 节点
+	for child in get_children():
+		if child is Timer and child.name.begins_with("SpawnTimer_"):
+			child.queue_free()
+	
 	score = 40
 	
 	# 设置玩家的血量（浮点型血条系统）

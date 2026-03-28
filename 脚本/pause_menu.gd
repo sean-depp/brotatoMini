@@ -399,3 +399,17 @@ func _on_weapon_slot_button_pressed() -> void:
 						hud.show_message("无法增加武器槽！")
 			else:
 				hud.show_message("金币不足！")
+
+func _on_restart_button_pressed() -> void:
+	# 取消暂停
+	get_tree().paused = false
+	
+	# 获取当前场景并调用 new_game
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_method("new_game"):
+		cur_scene.new_game()
+	
+	# 隐藏暂停菜单面板
+	var hud = get_tree().get_first_node_in_group("hud")
+	if hud and hud.has_method("show_pause_panel"):
+		hud.show_pause_panel(false)

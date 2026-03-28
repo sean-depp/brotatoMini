@@ -377,6 +377,29 @@ theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 24
 text = "购买"
 
+[node name="MiddlePanel" type="VBoxContainer" parent="MainContainer"]
+layout_mode = 2
+size_flags_horizontal = 1
+size_flags_vertical = 3
+
+[node name="TopSpacer" type="Control" parent="MainContainer/MiddlePanel"]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="RestartButton" type="Button" parent="MainContainer/MiddlePanel"]
+custom_minimum_size = Vector2(200, 60)
+layout_mode = 2
+size_flags_horizontal = 4
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 32
+text = "重新开始"
+
+[node name="BottomSpacer" type="Control" parent="MainContainer/MiddlePanel"]
+custom_minimum_size = Vector2(0, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
 [node name="RightPanel" type="VBoxContainer" parent="MainContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -485,3 +508,4 @@ horizontal_alignment = 1
 [connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
 [connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/ShotgunVBox/ShotgunButton" to="." method="_on_shotgun_button_pressed"]
 [connection signal="pressed" from="MainContainer/LeftPanel/WeaponShopGrid/GrenadeLauncherVBox/GrenadeLauncherButton" to="." method="_on_grenade_launcher_button_pressed"]
+[connection signal="pressed" from="MainContainer/MiddlePanel/RestartButton" to="." method="_on_restart_button_pressed"]
