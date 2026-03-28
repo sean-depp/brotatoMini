@@ -282,6 +282,9 @@ func new_game():
 	
 	# 重置防御值
 	$Player.reset_defense()
+	
+	# 重置宝物
+	$Player.reset_treasures()
 
 	$Player.start($StartPos.position)
 	

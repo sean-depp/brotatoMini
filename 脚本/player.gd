@@ -17,6 +17,14 @@ var can_move: bool = false
 # 防御系统（防御值，每点防御减少10%伤害）
 var defense: float = 0.0
 
+# 宝物系统
+var treasures: Array = []  # 存储已获得的宝物ID
+
+# 宝物定义：宝物ID -> {name, description, effects}
+const TREASURE_DEFINITIONS = {
+	"ramen": {"name": "拉面", "description": "伤害+10%", "damage_bonus_percent": 0.1},
+}
+
 # 无敌状态闪烁
 var is_invincible: bool = false
 
@@ -316,3 +324,43 @@ func get_weapon_slot_upgrades() -> int:
 func reset_weapon_slots() -> void:
 	max_weapons = 6
 	weapon_slot_upgrades = 0
+
+# 宝物系统函数
+# 添加宝物（允许重复添加相同宝物）
+func add_treasure(treasure_id: String) -> bool:
+	treasures.append(treasure_id)
+	return true
+
+# 获取所有宝物
+func get_treasures() -> Array:
+	return treasures
+
+# 获取宝物信息
+func get_treasure_info(treasure_id: String) -> Dictionary:
+	if treasure_id in TREASURE_DEFINITIONS:
+		return TREASURE_DEFINITIONS[treasure_id]
+	return {}
+
+# 获取宝物带来的伤害百分比加成（返回浮点数，如0.1表示10%加成）
+func get_treasure_damage_bonus_percent() -> float:
+	var bonus_percent = 0.0
+	for treasure_id in treasures:
+		if treasure_id in TREASURE_DEFINITIONS:
+			var treasure = TREASURE_DEFINITIONS[treasure_id]
+			if "damage_bonus_percent" in treasure:
+				bonus_percent += treasure["damage_bonus_percent"]
+	return bonus_percent
+
+# 获取宝物带来的伤害加成（整数，用于UI显示，每1表示10%）
+func get_treasure_damage_bonus() -> int:
+	var bonus = 0
+	for treasure_id in treasures:
+		if treasure_id in TREASURE_DEFINITIONS:
+			var treasure = TREASURE_DEFINITIONS[treasure_id]
+			if "damage_bonus_percent" in treasure:
+				bonus += int(treasure["damage_bonus_percent"] * 10)  # 转换为整数（每1表示10%）
+	return bonus
+
+# 重置宝物（新游戏时调用）
+func reset_treasures() -> void:
+	treasures.clear()

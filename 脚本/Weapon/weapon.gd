@@ -158,10 +158,18 @@ func _apply_weapon_config() -> void:
 			bullet_scene = load(bullet_path)
 
 # ==================== 计算最终属性的方法 ====================
-# 获取最终伤害（基础 * 伤害倍率，每点伤害加成增加10%）
+# 获取最终伤害（基础 * 伤害倍率，每点伤害加成增加10%，再加上宝物百分比加成）
 func get_damage() -> float:
 	var damage_multiplier = 1.0 + (damage_bonus * 0.1)  # 每点伤害加成增加10%伤害
-	return base_damage * damage_multiplier
+	
+	# 获取玩家的宝物伤害百分比加成
+	var player = get_parent()
+	if player and player.has_method("get_treasure_damage_bonus_percent"):
+		var treasure_bonus_percent = player.get_treasure_damage_bonus_percent()
+		damage_multiplier += treasure_bonus_percent  # 宝物百分比加成
+	
+	var final_damage = base_damage * damage_multiplier
+	return final_damage
 
 # 获取基础攻速（每秒攻击次数）
 func get_base_fire_rate() -> float:
@@ -305,7 +313,12 @@ func reset_bonuses() -> void:
 
 # ==================== 获取加成值的方法（用于UI显示）====================
 func get_damage_bonus() -> int:
-	return damage_bonus
+	# 返回武器伤害加成 + 宝物伤害加成
+	var total_bonus = damage_bonus
+	var player = get_parent()
+	if player and player.has_method("get_treasure_damage_bonus"):
+		total_bonus += player.get_treasure_damage_bonus()
+	return total_bonus
 
 func get_fire_rate_bonus() -> float:
 	return fire_rate_bonus

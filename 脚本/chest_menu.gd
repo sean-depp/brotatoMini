@@ -5,10 +5,11 @@ extends CanvasLayer
 
 signal reward_selected()
 
-# 三个奖励按钮
+# 四个奖励按钮
 @onready var button1: Button = $PanelContainer/VBoxContainer/Button1
 @onready var button2: Button = $PanelContainer/VBoxContainer/Button2
 @onready var button3: Button = $PanelContainer/VBoxContainer/Button3
+@onready var button4: Button = $PanelContainer/VBoxContainer/Button4
 
 func _ready():
 	# 设置为始终处理，即使游戏暂停也能接收输入
@@ -21,6 +22,8 @@ func _ready():
 		button2.pressed.connect(_on_button2_pressed)
 	if button3:
 		button3.pressed.connect(_on_button3_pressed)
+	if button4:
+		button4.pressed.connect(_on_button4_pressed)
 
 # 显示宝箱选择界面
 func show_chest_menu():
@@ -99,4 +102,22 @@ func _on_button3_pressed():
 					hud.update_score(cur_scene.score)
 				if hud and hud.has_method("show_message"):
 					hud.show_message("获得 +2 金币！")
+	hide_chest_menu()
+
+# 按钮4：拉面宝物（伤害+10%）
+func _on_button4_pressed():
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene:
+		# 获取玩家节点并添加宝物
+		var player = cur_scene.get_node_or_null("Player")
+		if player and player.has_method("add_treasure"):
+			player.add_treasure("ramen")
+			if cur_scene.has_node("HUD"):
+				var hud = cur_scene.get_node("HUD")
+				if hud and hud.has_method("show_message"):
+					hud.show_message("获得拉面！伤害+10%！")
+			# 更新暂停菜单的宝物显示
+			var pause_menu = get_tree().get_first_node_in_group("pause_menu")
+			if pause_menu and pause_menu.has_method("update_value_labels"):
+				pause_menu.update_value_labels()
 	hide_chest_menu()

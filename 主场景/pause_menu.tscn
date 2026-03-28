@@ -2,6 +2,7 @@
 
 [ext_resource type="FontFile" uid="uid://bqyc44cmgmvaq" path="res://资源/fonts/Xolonium-Regular.ttf" id="1_8nm0t"]
 [ext_resource type="Script" uid="uid://bkq52m6oiexts" path="res://脚本/pause_menu.gd" id="1_hax5v"]
+[ext_resource type="Texture2D" uid="uid://b5qa0xp5fpexq" path="res://资源/art/foods/Foods_29.png" id="3_lompk"]
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.2, 0.2, 0.25, 0.9)
@@ -9,10 +10,9 @@ border_width_left = 20
 border_width_top = 20
 border_width_right = 20
 border_width_bottom = 20
-border_radius_top_left = 15
-border_radius_top_right = 15
-border_radius_bottom_right = 15
-border_radius_bottom_left = 15
+
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
+bg_color = Color(0.3, 0.3, 0.35, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_right"]
 bg_color = Color(0.2, 0.25, 0.2, 0.9)
@@ -20,56 +20,52 @@ border_width_left = 20
 border_width_top = 20
 border_width_right = 20
 border_width_bottom = 20
-border_radius_top_left = 15
-border_radius_top_right = 15
-border_radius_bottom_right = 15
-border_radius_bottom_left = 15
 
-[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
-bg_color = Color(0.3, 0.3, 0.35, 1.0)
-border_radius_top_left = 8
-border_radius_top_right = 8
-border_radius_bottom_right = 8
-border_radius_bottom_left = 8
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_middle"]
+bg_color = Color(0.25, 0.2, 0.2, 0.9)
+border_width_left = 20
+border_width_top = 20
+border_width_right = 20
+border_width_bottom = 20
 
-[node name="PauseMenu" type="CanvasLayer"]
+[node name="PauseMenu" type="CanvasLayer" unique_id=224708675]
 layer = 10
 script = ExtResource("1_hax5v")
 
-[node name="MainContainer" type="VBoxContainer" parent="."]
+[node name="MainContainer" type="VBoxContainer" parent="." unique_id=2051634139]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
 
-[node name="TopMargin" type="Control" parent="MainContainer"]
+[node name="TopMargin" type="Control" parent="MainContainer" unique_id=1342078070]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
-[node name="ContentRow" type="HBoxContainer" parent="MainContainer"]
+[node name="ContentRow" type="HBoxContainer" parent="MainContainer" unique_id=1031107358]
 layout_mode = 2
 size_flags_vertical = 3
 theme_override_constants/separation = 30
 
-[node name="LeftMargin" type="Control" parent="MainContainer/ContentRow"]
+[node name="LeftMargin" type="Control" parent="MainContainer/ContentRow" unique_id=982099064]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
-[node name="LeftPanel" type="PanelContainer" parent="MainContainer/ContentRow"]
+[node name="LeftPanel" type="PanelContainer" parent="MainContainer/ContentRow" unique_id=1201211444]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_left")
 
-[node name="LeftContent" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel"]
+[node name="LeftContent" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel" unique_id=52328381]
 layout_mode = 2
 
-[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=603252208]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="ShopTitle" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="ShopTitle" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=53573805]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -77,19 +73,19 @@ theme_override_font_sizes/font_size = 36
 text = "属性升级"
 horizontal_alignment = 1
 
-[node name="ShopGrid" type="GridContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="ShopGrid" type="GridContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=143821723]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
+columns = 2
 
-[node name="HPVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="HPVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=900580818]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="HPLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox"]
+[node name="HPLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox" unique_id=158054035]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -97,7 +93,7 @@ theme_override_font_sizes/font_size = 24
 text = "生命上限"
 horizontal_alignment = 1
 
-[node name="HPPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox"]
+[node name="HPPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox" unique_id=852891634]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -105,7 +101,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 2"
 horizontal_alignment = 1
 
-[node name="BuyButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox"]
+[node name="BuyButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/HPVBox" unique_id=1362739366]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -114,11 +110,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="RangeVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="RangeVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=1866413336]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="RangeLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox"]
+[node name="RangeLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox" unique_id=1696059056]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -126,7 +122,7 @@ theme_override_font_sizes/font_size = 24
 text = "增加射程"
 horizontal_alignment = 1
 
-[node name="RangePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox"]
+[node name="RangePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox" unique_id=220779495]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -134,7 +130,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 1"
 horizontal_alignment = 1
 
-[node name="RangeButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox"]
+[node name="RangeButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/RangeVBox" unique_id=563900827]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -143,11 +139,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="FireVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="FireVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=1200114157]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="FireLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox"]
+[node name="FireLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox" unique_id=1673568288]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -155,7 +151,7 @@ theme_override_font_sizes/font_size = 24
 text = "增加攻速"
 horizontal_alignment = 1
 
-[node name="FirePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox"]
+[node name="FirePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox" unique_id=802763679]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -163,7 +159,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 1"
 horizontal_alignment = 1
 
-[node name="FireRateButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox"]
+[node name="FireRateButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/FireVBox" unique_id=1038784061]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -172,11 +168,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="SpeedVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="SpeedVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=126595910]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="SpeedLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox"]
+[node name="SpeedLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox" unique_id=625218878]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -184,7 +180,7 @@ theme_override_font_sizes/font_size = 24
 text = "增加速度"
 horizontal_alignment = 1
 
-[node name="SpeedPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox"]
+[node name="SpeedPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox" unique_id=1860965694]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -192,7 +188,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 1"
 horizontal_alignment = 1
 
-[node name="SpeedButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox"]
+[node name="SpeedButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/SpeedVBox" unique_id=1548202689]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -201,11 +197,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="DamageVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="DamageVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=1844072192]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DamageLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox"]
+[node name="DamageLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox" unique_id=870533014]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -213,7 +209,7 @@ theme_override_font_sizes/font_size = 24
 text = "增加伤害"
 horizontal_alignment = 1
 
-[node name="DamagePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox"]
+[node name="DamagePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox" unique_id=1117502547]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -221,7 +217,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 10"
 horizontal_alignment = 1
 
-[node name="DamageButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox"]
+[node name="DamageButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DamageVBox" unique_id=712444603]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -230,11 +226,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="ExplosionVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="ExplosionVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=909760582]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ExplosionLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox"]
+[node name="ExplosionLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox" unique_id=1550306419]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -242,7 +238,7 @@ theme_override_font_sizes/font_size = 24
 text = "爆炸范围"
 horizontal_alignment = 1
 
-[node name="ExplosionPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox"]
+[node name="ExplosionPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox" unique_id=859944262]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -250,7 +246,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 10"
 horizontal_alignment = 1
 
-[node name="ExplosionButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox"]
+[node name="ExplosionButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/ExplosionVBox" unique_id=934559380]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -259,11 +255,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="DefenseVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="DefenseVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=1847935252]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="DefenseLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox"]
+[node name="DefenseLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox" unique_id=385185269]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -271,7 +267,7 @@ theme_override_font_sizes/font_size = 24
 text = "增加防御"
 horizontal_alignment = 1
 
-[node name="DefensePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox"]
+[node name="DefensePrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox" unique_id=34482260]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -279,7 +275,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 5"
 horizontal_alignment = 1
 
-[node name="DefenseButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox"]
+[node name="DefenseButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/DefenseVBox" unique_id=1904221778]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -288,11 +284,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="WeaponSlotVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid"]
+[node name="WeaponSlotVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid" unique_id=1577816982]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="WeaponSlotLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox"]
+[node name="WeaponSlotLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox" unique_id=1291903220]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -300,7 +296,7 @@ theme_override_font_sizes/font_size = 24
 text = "武器槽+1"
 horizontal_alignment = 1
 
-[node name="WeaponSlotPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox"]
+[node name="WeaponSlotPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox" unique_id=1492039760]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -308,7 +304,7 @@ theme_override_font_sizes/font_size = 18
 text = "价格: 30 (限2次)"
 horizontal_alignment = 1
 
-[node name="WeaponSlotButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox"]
+[node name="WeaponSlotButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/ShopGrid/WeaponSlotVBox" unique_id=585016053]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -317,11 +313,11 @@ theme_override_font_sizes/font_size = 24
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="MiddleSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="MiddleSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=1683071781]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="WeaponShopTitle" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="WeaponShopTitle" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=1098825388]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -329,19 +325,19 @@ theme_override_font_sizes/font_size = 36
 text = "购买武器"
 horizontal_alignment = 1
 
-[node name="WeaponShopGrid" type="GridContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="WeaponShopGrid" type="GridContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=2016967870]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
-columns = 2
 theme_override_constants/h_separation = 10
 theme_override_constants/v_separation = 10
+columns = 2
 
-[node name="WeaponVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid"]
+[node name="WeaponVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid" unique_id=557194099]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="WeaponLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox"]
+[node name="WeaponLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox" unique_id=380498214]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -349,7 +345,7 @@ theme_override_font_sizes/font_size = 22
 text = "冲锋枪"
 horizontal_alignment = 1
 
-[node name="WeaponStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox"]
+[node name="WeaponStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox" unique_id=1700865000]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -358,7 +354,7 @@ text = "伤害:1 攻速:2.0
 射程:200 子弹:1"
 horizontal_alignment = 1
 
-[node name="WeaponPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox"]
+[node name="WeaponPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox" unique_id=1959969971]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -366,7 +362,7 @@ theme_override_font_sizes/font_size = 16
 text = "价格: 10"
 horizontal_alignment = 1
 
-[node name="WeaponButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox"]
+[node name="WeaponButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox" unique_id=507959964]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -375,11 +371,11 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="ShotgunVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid"]
+[node name="ShotgunVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid" unique_id=1017094603]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="ShotgunLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox"]
+[node name="ShotgunLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox" unique_id=1332574165]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -387,7 +383,7 @@ theme_override_font_sizes/font_size = 22
 text = "霰弹枪"
 horizontal_alignment = 1
 
-[node name="ShotgunStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox"]
+[node name="ShotgunStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox" unique_id=1950938455]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -396,7 +392,7 @@ text = "伤害:2 攻速:1.0
 射程:150 子弹:5"
 horizontal_alignment = 1
 
-[node name="ShotgunPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox"]
+[node name="ShotgunPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox" unique_id=1255307840]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -404,7 +400,7 @@ theme_override_font_sizes/font_size = 16
 text = "价格: 15"
 horizontal_alignment = 1
 
-[node name="ShotgunButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox"]
+[node name="ShotgunButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox" unique_id=655212357]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -413,11 +409,11 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="GrenadeLauncherVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid"]
+[node name="GrenadeLauncherVBox" type="VBoxContainer" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid" unique_id=1016782782]
 layout_mode = 2
 size_flags_horizontal = 3
 
-[node name="GrenadeLauncherLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox"]
+[node name="GrenadeLauncherLabel" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox" unique_id=1196900480]
 custom_minimum_size = Vector2(0, 25)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -425,7 +421,7 @@ theme_override_font_sizes/font_size = 22
 text = "榴弹枪"
 horizontal_alignment = 1
 
-[node name="GrenadeLauncherStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox"]
+[node name="GrenadeLauncherStats" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox" unique_id=2136774705]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -434,7 +430,7 @@ text = "伤害:1 攻速:0.67
 射程:300 爆炸:80"
 horizontal_alignment = 1
 
-[node name="GrenadeLauncherPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox"]
+[node name="GrenadeLauncherPrice" type="Label" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox" unique_id=645018249]
 custom_minimum_size = Vector2(0, 18)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -442,7 +438,7 @@ theme_override_font_sizes/font_size = 16
 text = "价格: 20"
 horizontal_alignment = 1
 
-[node name="GrenadeLauncherButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox"]
+[node name="GrenadeLauncherButton" type="Button" parent="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox" unique_id=1098683191]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 size_flags_horizontal = 3
@@ -451,21 +447,23 @@ theme_override_font_sizes/font_size = 20
 theme_override_styles/normal = SubResource("StyleBoxFlat_button")
 text = "购买"
 
-[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent"]
+[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/LeftPanel/LeftContent" unique_id=1624761587]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="MiddlePanel" type="VBoxContainer" parent="MainContainer/ContentRow"]
-layout_mode = 2
-size_flags_horizontal = 1
-size_flags_vertical = 3
-
-[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/MiddlePanel"]
-custom_minimum_size = Vector2(0, 0)
+[node name="MiddlePanel" type="PanelContainer" parent="MainContainer/ContentRow" unique_id=1229348590]
 layout_mode = 2
 size_flags_vertical = 3
+theme_override_styles/panel = SubResource("StyleBoxFlat_middle")
 
-[node name="RestartButton" type="Button" parent="MainContainer/ContentRow/MiddlePanel"]
+[node name="MiddleContent" type="VBoxContainer" parent="MainContainer/ContentRow/MiddlePanel" unique_id=52328382]
+layout_mode = 2
+
+[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent" unique_id=665204839]
+custom_minimum_size = Vector2(0, 20)
+layout_mode = 2
+
+[node name="RestartButton" type="Button" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent" unique_id=460233096]
 custom_minimum_size = Vector2(180, 50)
 layout_mode = 2
 size_flags_horizontal = 4
@@ -473,25 +471,86 @@ theme_override_fonts/font = ExtResource("1_8nm0t")
 theme_override_font_sizes/font_size = 28
 text = "重新开始"
 
-[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/MiddlePanel"]
-custom_minimum_size = Vector2(0, 0)
+[node name="TreasureSection" type="VBoxContainer" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent" unique_id=747644997]
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="TreasureTitle" type="Label" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection" unique_id=1653861195]
+custom_minimum_size = Vector2(0, 40)
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 28
+text = "宝物"
+horizontal_alignment = 1
+
+[node name="TreasureGrid" type="GridContainer" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection" unique_id=776097898]
+layout_mode = 2
+size_flags_horizontal = 3
+theme_override_constants/h_separation = 10
+theme_override_constants/v_separation = 10
+columns = 4
+
+[node name="TreasureSlot1" type="TextureRect" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid" unique_id=400818183]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="TreasureSlot2" type="TextureRect" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid" unique_id=405797549]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+stretch_mode = 5
+
+[node name="RamenIconSlot" type="Control" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid" unique_id=1585103700]
+custom_minimum_size = Vector2(48, 48)
+layout_mode = 2
+
+[node name="RamenIcon" type="TextureRect" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot" unique_id=482652248]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+texture = ExtResource("3_lompk")
+stretch_mode = 5
+
+[node name="RamenCount" type="Label" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot" unique_id=2093939305]
+layout_mode = 1
+anchors_preset = 2
+anchor_top = 0.0
+anchor_right = 1.0
+anchor_bottom = 0.4
+offset_top = -4
+offset_right = 4
+offset_bottom = 12
+grow_horizontal = 2
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+theme_override_colors/font_outline_color = Color(0, 0, 0, 1)
+theme_override_constants/outline_size = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 14
+horizontal_alignment = 2
+vertical_alignment = 1
+text = "0"
+
+[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent" unique_id=1769975522]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="RightPanel" type="PanelContainer" parent="MainContainer/ContentRow"]
+[node name="RightPanel" type="PanelContainer" parent="MainContainer/ContentRow" unique_id=1706805889]
 layout_mode = 2
 size_flags_horizontal = 3
 size_flags_vertical = 3
 theme_override_styles/panel = SubResource("StyleBoxFlat_right")
 
-[node name="RightContent" type="VBoxContainer" parent="MainContainer/ContentRow/RightPanel"]
+[node name="RightContent" type="VBoxContainer" parent="MainContainer/ContentRow/RightPanel" unique_id=1111388507]
 layout_mode = 2
 
-[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/RightPanel/RightContent"]
+[node name="TopSpacer" type="Control" parent="MainContainer/ContentRow/RightPanel/RightContent" unique_id=706519527]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="StatsTitle" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent"]
+[node name="StatsTitle" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent" unique_id=2080189008]
 custom_minimum_size = Vector2(0, 40)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -499,11 +558,11 @@ theme_override_font_sizes/font_size = 36
 text = "玩家属性"
 horizontal_alignment = 1
 
-[node name="StatsVBox" type="VBoxContainer" parent="MainContainer/ContentRow/RightPanel/RightContent"]
+[node name="StatsVBox" type="VBoxContainer" parent="MainContainer/ContentRow/RightPanel/RightContent" unique_id=387800932]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScoreLabel" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="ScoreLabel" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1144744917]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -511,7 +570,7 @@ theme_override_font_sizes/font_size = 28
 text = "金币: 0"
 horizontal_alignment = 1
 
-[node name="HPValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="HPValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1668487946]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -519,7 +578,7 @@ theme_override_font_sizes/font_size = 28
 text = "生命上限: 0"
 horizontal_alignment = 1
 
-[node name="SpeedValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="SpeedValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=653467709]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -527,7 +586,7 @@ theme_override_font_sizes/font_size = 28
 text = "速度: 0"
 horizontal_alignment = 1
 
-[node name="WeaponSlotValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="WeaponSlotValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=466742184]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -535,7 +594,7 @@ theme_override_font_sizes/font_size = 28
 text = "武器槽: 6/8"
 horizontal_alignment = 1
 
-[node name="WeaponStatsTitle" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="WeaponStatsTitle" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=693376899]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -543,7 +602,7 @@ theme_override_font_sizes/font_size = 24
 text = "--- 武器属性 ---"
 horizontal_alignment = 1
 
-[node name="DamageValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="DamageValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1801213276]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -551,7 +610,7 @@ theme_override_font_sizes/font_size = 28
 text = "伤害: 0"
 horizontal_alignment = 1
 
-[node name="FireValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="FireValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1899753116]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -559,7 +618,7 @@ theme_override_font_sizes/font_size = 28
 text = "攻速: 0.0"
 horizontal_alignment = 1
 
-[node name="RangeValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="RangeValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1656896856]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -567,7 +626,7 @@ theme_override_font_sizes/font_size = 28
 text = "射程: 0"
 horizontal_alignment = 1
 
-[node name="ExplosionValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="ExplosionValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1205238373]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -575,7 +634,7 @@ theme_override_font_sizes/font_size = 28
 text = "爆炸范围: 0"
 horizontal_alignment = 1
 
-[node name="DefenseValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox"]
+[node name="DefenseValue" type="Label" parent="MainContainer/ContentRow/RightPanel/RightContent/StatsVBox" unique_id=1711646649]
 custom_minimum_size = Vector2(0, 35)
 layout_mode = 2
 theme_override_fonts/font = ExtResource("1_8nm0t")
@@ -583,15 +642,15 @@ theme_override_font_sizes/font_size = 28
 text = "防御: 0 (0%减伤)"
 horizontal_alignment = 1
 
-[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/RightPanel/RightContent"]
+[node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/RightPanel/RightContent" unique_id=2095626658]
 custom_minimum_size = Vector2(0, 20)
 layout_mode = 2
 
-[node name="RightMargin" type="Control" parent="MainContainer/ContentRow"]
+[node name="RightMargin" type="Control" parent="MainContainer/ContentRow" unique_id=176762212]
 custom_minimum_size = Vector2(30, 0)
 layout_mode = 2
 
-[node name="BottomMargin" type="Control" parent="MainContainer"]
+[node name="BottomMargin" type="Control" parent="MainContainer" unique_id=1638231884]
 custom_minimum_size = Vector2(0, 30)
 layout_mode = 2
 
@@ -606,4 +665,4 @@ layout_mode = 2
 [connection signal="pressed" from="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/WeaponVBox/WeaponButton" to="." method="_on_weapon_button_pressed"]
 [connection signal="pressed" from="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/ShotgunVBox/ShotgunButton" to="." method="_on_shotgun_button_pressed"]
 [connection signal="pressed" from="MainContainer/ContentRow/LeftPanel/LeftContent/WeaponShopGrid/GrenadeLauncherVBox/GrenadeLauncherButton" to="." method="_on_grenade_launcher_button_pressed"]
-[connection signal="pressed" from="MainContainer/ContentRow/MiddlePanel/RestartButton" to="." method="_on_restart_button_pressed"]
+[connection signal="pressed" from="MainContainer/ContentRow/MiddlePanel/MiddleContent/RestartButton" to="." method="_on_restart_button_pressed"]

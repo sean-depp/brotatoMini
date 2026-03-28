@@ -32,6 +32,14 @@ color = Color(0.6, 0.75, 0.9, 1)
 
 [node name="GroundDecorations" type="Node2D" parent="." unique_id=2001111111]
 
+[node name="DecorationSlot1" type="Sprite2D" parent="GroundDecorations" unique_id=3001111111]
+position = Vector2(200, 200)
+scale = Vector2(0.3, 0.3)
+
+[node name="DecorationSlot2" type="Sprite2D" parent="GroundDecorations" unique_id=3001111112]
+position = Vector2(2360, 1240)
+scale = Vector2(0.3, 0.3)
+
 [node name="Player" parent="." unique_id=1708377610 instance=ExtResource("3_lquwl")]
 visible = false
 

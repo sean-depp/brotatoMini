@@ -160,12 +160,14 @@ func _on_start_button_pressed() -> void:
 
 func show_pause_panel(isshow: bool) -> void:
 	# 显示或隐藏暂停面板
+	var pause_menu = get_node_or_null("PauseMenu")
+	if pause_menu == null:
+		return
+	
 	if isshow:
-		# 在显示暂停面板前刷新其数值显示（如果实现了刷新方法）
-		if has_node("PauseMenu"):
-			var pm = $PauseMenu
-			if pm and pm.has_method("update_value_labels"):
-				pm.update_value_labels()
-		$PauseMenu.show()
+		# 在显示暂停面板前刷新其数值显示
+		if pause_menu.has_method("update_value_labels"):
+			pause_menu.update_value_labels()
+		pause_menu.show()
 	else:
-		$PauseMenu.hide()
+		pause_menu.hide()
