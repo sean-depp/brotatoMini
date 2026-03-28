@@ -19,14 +19,19 @@ var is_invincible: bool = false
 
 # 武器系统：同时挂载多把枪（最多 `max_weapons`）
 @export var max_weapons: int = 6
-# 左右各三点，依次从上到下右侧再左侧
+@export var max_weapon_slots: int = 8  # 武器槽位上限（最多购买2次升级）
+var weapon_slot_upgrades: int = 0  # 已购买的武器槽升级次数
+
+# 左右各四点，依次从上到下右侧再左侧（最多8个位置）
 @export var weapon_offsets := [
-	Vector2(40, -16),
-	Vector2(40, 0),
-	Vector2(40, 16),
-	Vector2(-40, -16),
-	Vector2(-40, 0),
-	Vector2(-40, 16)
+	Vector2(40, -24),
+	Vector2(40, -8),
+	Vector2(40, 8),
+	Vector2(40, 24),
+	Vector2(-40, -24),
+	Vector2(-40, -8),
+	Vector2(-40, 8),
+	Vector2(-40, 24)
 ]
 var weapons: Array = []
 var weapon_scene = preload("res://武器/weapon.tscn")
@@ -276,3 +281,25 @@ func get_speed() -> float:
 # 重置速度到初始值
 func reset_speed() -> void:
 	speed = 300
+
+# 增加武器槽位上限（最多购买2次，从6增加到8）
+func increase_weapon_slots() -> bool:
+	# 检查是否已达到最大槽位数
+	if max_weapons >= max_weapon_slots:
+		return false
+	# 检查是否已购买最大次数
+	if weapon_slot_upgrades >= 2:
+		return false
+	
+	max_weapons += 1
+	weapon_slot_upgrades += 1
+	return true
+
+# 获取武器槽升级次数
+func get_weapon_slot_upgrades() -> int:
+	return weapon_slot_upgrades
+
+# 重置武器槽位（新游戏时调用）
+func reset_weapon_slots() -> void:
+	max_weapons = 6
+	weapon_slot_upgrades = 0

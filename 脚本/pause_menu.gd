@@ -22,9 +22,9 @@ func update_value_labels() -> void:
 	if cur_scene.has_node("Player"):
 		var player = cur_scene.get_node("Player")
 		
-		# 更新武器数显示（无论是否有武器都要更新）
-		if has_node("MainContainer/RightPanel/StatsVBox/WeaponValue"):
-			get_node("MainContainer/RightPanel/StatsVBox/WeaponValue").text = "武器数: %d" % player.weapons.size()
+		# 更新武器槽显示
+		if has_node("MainContainer/RightPanel/StatsVBox/WeaponSlotValue"):
+			get_node("MainContainer/RightPanel/StatsVBox/WeaponSlotValue").text = "武器槽: %d/%d" % [player.weapons.size(), player.max_weapons]
 		
 		# 查找第一个武器用于显示属性
 		var first_weapon = null
@@ -372,5 +372,30 @@ func _on_defense_button_pressed() -> void:
 						hud.show_message("购买防御成功！")
 					else:
 						hud.show_message("无法增加防御！")
+			else:
+				hud.show_message("金币不足！")
+
+func _on_weapon_slot_button_pressed() -> void:
+	var cur_scene = get_tree().get_current_scene()
+	if cur_scene and cur_scene.has_node("HUD"):
+		var hud = cur_scene.get_node("HUD")
+		
+		# 检测金币数
+		var main = get_tree().get_current_scene()
+		if main and "score" in main:
+			if main.score >= 30:
+				# 尝试增加武器槽
+				if cur_scene.has_node("Player"):
+					var player = cur_scene.get_node("Player")
+					if player.has_method("increase_weapon_slots"):
+						if player.increase_weapon_slots():
+							main.score -= 30
+							hud.update_score(main.score)
+							update_value_labels()
+							hud.show_message("购买武器槽成功！当前上限: %d" % player.max_weapons)
+						else:
+							hud.show_message("武器槽已达上限！")
+					else:
+						hud.show_message("无法增加武器槽！")
 			else:
 				hud.show_message("金币不足！")
