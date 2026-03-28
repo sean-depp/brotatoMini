@@ -11,6 +11,9 @@ var max_health: float = 5.0
 var current_health: float = 5.0
 var is_dead: bool = false
 
+# 游戏运行状态（控制玩家是否可以移动）
+var can_move: bool = false
+
 # 防御系统（防御值，每点防御减少10%伤害）
 var defense: float = 0.0
 
@@ -49,6 +52,10 @@ func _ready() -> void:
 	hide()
 
 func _physics_process(delta: float) -> void:
+	# 如果不能移动，直接返回
+	if not can_move:
+		return
+	
 	var velocity = Vector2.ZERO # The player's movement vector.
 	if Input.is_action_pressed("right"):
 		velocity.x += 1
@@ -126,6 +133,9 @@ func start(pos):
 	position = pos
 	show()
 	$CollisionShape2D.disabled = false
+	
+	# 启用移动
+	can_move = true
 	
 	# 重置生命值状态
 	is_dead = false
@@ -257,6 +267,9 @@ func die() -> void:
 	if is_dead:
 		return
 	is_dead = true
+	
+	# 禁用移动
+	can_move = false
 	
 	# 禁用碰撞
 	$CollisionShape2D.set_deferred("disabled", true)

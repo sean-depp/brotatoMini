@@ -2,6 +2,13 @@ extends Node
 
 @export var mob_scene: PackedScene
 @export var spawn_marker_texture: Texture2D  # 怪物生成标记的贴图（X）
+
+# 地面装饰贴图数组（在编辑器中添加多个贴图）
+@export var ground_decoration_textures: Array[Texture2D] = []
+@export var decoration_count: int = 100  # 装饰物数量
+@export var decoration_scale_min: float = 0.3  # 最小缩放
+@export var decoration_scale_max: float = 0.7  # 最大缩放
+
 var score = 0
 var cur_level = 1
 var speed_min = 150
@@ -22,13 +29,15 @@ func _ready() -> void:
 	# 设置相机跟踪玩家
 	_setup_camera()
 	
-	# 初始化：玩家和相机都放在 StartPos，避免初始时显示灰色区域
-	$Player.start($StartPos.position)
+	# 初始化相机位置
 	if has_node("Camera2D"):
 		get_node("Camera2D").global_position = $StartPos.position
 	
 	# 绘制地图边界
 	_draw_map_boundary()
+	
+	# 生成地面装饰物
+	_generate_ground_decorations()
 	
 	# 初始化HUD血条显示（显示玩家初始血量）
 	$HUD.update_health_bar($Player.get_health(), $Player.get_max_health())
@@ -189,6 +198,49 @@ func _draw_map_boundary() -> void:
 	boundary.add_point(Vector2(0, 1440))
 	
 	add_child(boundary)
+
+func _generate_ground_decorations() -> void:
+	# 检查是否有装饰贴图
+	if ground_decoration_textures.is_empty():
+		return
+	
+	# 获取或创建 GroundDecorations 节点
+	var decorations_parent: Node2D
+	if has_node("GroundDecorations"):
+		decorations_parent = get_node("GroundDecorations")
+	else:
+		decorations_parent = Node2D.new()
+		decorations_parent.name = "GroundDecorations"
+		add_child(decorations_parent)
+	
+	# 随机生成装饰物
+	for i in range(decoration_count):
+		var decoration = Sprite2D.new()
+		decoration.name = "Decoration_%d" % i
+		
+		# 随机选择一个贴图
+		var texture_index = randi() % ground_decoration_textures.size()
+		decoration.texture = ground_decoration_textures[texture_index]
+		
+		# 随机位置（在整个地图范围内）
+		var pos = Vector2(
+			randf_range(50, 2510),  # x: 50 到 2510（留出边距）
+			randf_range(50, 1390)   # y: 50 到 1390（留出边距）
+		)
+		decoration.global_position = pos
+		
+		# 随机缩放
+		var scale_value = randf_range(decoration_scale_min, decoration_scale_max)
+		decoration.scale = Vector2(scale_value, scale_value)
+		
+		# 随机旋转（可选，让装饰更自然）
+		decoration.rotation = randf_range(0, TAU)
+		
+		# 设置 z_index 为 -1，确保在背景之上但在其他物体之下
+		decoration.z_index = -1
+		
+		# 添加到场景
+		decorations_parent.add_child(decoration)
 
 func new_game():
 	# 通过start_game信号启动新游戏
