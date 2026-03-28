@@ -20,6 +20,11 @@ var defense: float = 0.0
 # 宝物系统
 var treasures: Array = []  # 存储已获得的宝物ID
 
+# 经验值和等级系统
+var experience: int = 0  # 当前经验值
+var level: int = 1  # 当前等级（1-100级）
+const MAX_LEVEL: int = 100  # 最高等级
+
 # 宝物定义：宝物ID -> {name, description, effects}
 const TREASURE_DEFINITIONS = {
 	"ramen": {"name": "拉面", "description": "伤害+10%", "damage_bonus_percent": 0.1},
@@ -364,3 +369,67 @@ func get_treasure_damage_bonus() -> int:
 # 重置宝物（新游戏时调用）
 func reset_treasures() -> void:
 	treasures.clear()
+
+# ==================== 经验值和等级系统 ====================
+# 获取指定等级升级所需经验值（更合理的曲线，最高100级）
+# 1级: 5, 2级: 8, 3级: 12, 4级: 17, 5级: 23...
+# 公式：基础值 + 等级相关的递增曲线
+func get_exp_required_for_level(lvl: int) -> int:
+	if lvl >= MAX_LEVEL:
+		return 999999  # 满级后不再需要经验
+	# 使用二次曲线：基础5 + 等级*2 + (等级-1)*等级/4
+	# 1级=5, 2级=8, 3级=12, 4级=17, 5级=23, 10级=55, 20级=155, 50级=755, 99级=2575
+	return 5 + lvl * 2 + (lvl - 1) * lvl / 4
+
+# 获取当前等级升级所需经验值
+func get_current_exp_required() -> int:
+	return get_exp_required_for_level(level)
+
+# 获取当前经验值
+func get_experience() -> int:
+	return experience
+
+# 获取当前等级
+func get_level() -> int:
+	return level
+
+# 增加经验值（吃金币时调用）
+func add_experience(amount: int) -> void:
+	# 如果已满级，不再增加经验
+	if level >= MAX_LEVEL:
+		return
+	
+	experience += amount
+	# 检查是否升级
+	_check_level_up()
+
+# 检查是否升级
+func _check_level_up() -> void:
+	# 防止超过最大等级
+	while level < MAX_LEVEL and experience >= get_current_exp_required():
+		var exp_required = get_current_exp_required()
+		experience -= exp_required
+		level += 1
+		_on_level_up()
+	
+	# 如果达到满级，经验清零
+	if level >= MAX_LEVEL:
+		experience = 0
+
+# 升级时的处理
+func _on_level_up() -> void:
+	# 更新HUD显示等级
+	var hud = get_tree().get_first_node_in_group("hud")
+	if hud:
+		if hud.has_method("update_exp_bar"):
+			hud.update_exp_bar(experience, get_current_exp_required(), level)
+		if hud.has_method("show_message"):
+			if level >= MAX_LEVEL:
+				hud.show_message("满级！等级 %d" % level)
+			else:
+				hud.show_message("升级！等级 %d" % level)
+
+# 重置经验值和等级（新游戏时调用）
+func reset_experience() -> void:
+	experience = 0
+	level = 1

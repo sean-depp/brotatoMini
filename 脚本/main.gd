@@ -106,6 +106,15 @@ func add_score(amount: int = 1) -> void:
 	# 通过主脚本统一修改分数并更新 HUD
 	score += amount
 	$HUD.update_score(score)
+	
+	# 增加玩家经验值（每吃一个金币+1经验）
+	if has_node("Player"):
+		var player = $Player
+		if player.has_method("add_experience"):
+			player.add_experience(amount)
+			# 更新经验条显示
+			if $HUD.has_method("update_exp_bar"):
+				$HUD.update_exp_bar(player.get_experience(), player.get_current_exp_required(), player.get_level())
 
 func is_running() -> bool:
 	return running
@@ -285,6 +294,13 @@ func new_game():
 	
 	# 重置宝物
 	$Player.reset_treasures()
+	
+	# 重置经验值和等级
+	$Player.reset_experience()
+	
+	# 初始化经验条显示
+	if $HUD.has_method("update_exp_bar"):
+		$HUD.update_exp_bar($Player.get_experience(), $Player.get_current_exp_required(), $Player.get_level())
 
 	$Player.start($StartPos.position)
 	

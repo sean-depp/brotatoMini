@@ -10,6 +10,12 @@ var health_bar_fill: ColorRect
 var health_bar_bg: ColorRect
 var health_label: Label
 
+# 经验条系统
+var exp_bar: Control
+var exp_bar_fill: ColorRect
+var exp_bar_bg: ColorRect
+var exp_label: Label
+
 func _ready() -> void:
 	# 设置为始终处理，即使游戏暂停也能接收输入
 	process_mode = PROCESS_MODE_ALWAYS
@@ -89,6 +95,57 @@ func _setup_health_bar() -> void:
 	
 	# 将血条添加到HUD节点
 	add_child(health_bar)
+	
+	# 初始化经验条
+	_setup_exp_bar()
+
+# 初始化经验条
+func _setup_exp_bar() -> void:
+	# 创建经验条容器（Control节点）
+	exp_bar = Control.new()
+	exp_bar.name = "ExpBar"
+	exp_bar.position = Vector2(20, 45)  # 经验条位置（血条下方）
+	exp_bar.custom_minimum_size = Vector2(200, 15)  # 经验条容器大小
+	
+	# 创建经验条背景（深灰色）
+	exp_bar_bg = ColorRect.new()
+	exp_bar_bg.name = "Background"
+	exp_bar_bg.color = Color(0.3, 0.3, 0.3, 0.8)
+	exp_bar_bg.size = Vector2(200, 15)  # 背景大小
+	exp_bar_bg.position = Vector2(0, 0)
+	exp_bar.add_child(exp_bar_bg)
+	
+	# 创建经验条前景（黄色）
+	exp_bar_fill = ColorRect.new()
+	exp_bar_fill.name = "Fill"
+	exp_bar_fill.color = Color(1.0, 0.8, 0.0, 0.9)  # 金黄色
+	exp_bar_fill.size = Vector2(0, 15)  # 前景大小（初始为0）
+	exp_bar_fill.position = Vector2(0, 0)
+	exp_bar.add_child(exp_bar_fill)
+	
+	# 创建经验标签（显示等级和经验）
+	exp_label = Label.new()
+	exp_label.name = "ExpLabel"
+	exp_label.text = "Lv.1 0/5"
+	exp_label.position = Vector2(210, 0)  # 在经验条右侧
+	exp_label.add_theme_font_size_override("font_size", 14)
+	exp_label.add_theme_color_override("font_color", Color.WHITE)
+	exp_bar.add_child(exp_label)
+	
+	# 将经验条添加到HUD节点
+	add_child(exp_bar)
+
+# 更新经验条显示
+func update_exp_bar(current_exp: int, exp_required: int, level: int) -> void:
+	if exp_bar_fill != null and is_instance_valid(exp_bar_fill):
+		# 计算经验条宽度比例
+		var exp_ratio = float(current_exp) / float(exp_required) if exp_required > 0 else 0.0
+		# 更新经验条前景宽度
+		exp_bar_fill.size.x = 200.0 * exp_ratio
+	
+	# 更新经验标签
+	if exp_label != null and is_instance_valid(exp_label):
+		exp_label.text = "Lv.%d %d/%d" % [level, current_exp, exp_required]
 
 # 更新血条显示（支持浮点类型）
 func update_health_bar(current: float, max_val: float) -> void:
