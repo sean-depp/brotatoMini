@@ -6,27 +6,27 @@
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_left"]
 bg_color = Color(0.2, 0.2, 0.25, 0.9)
-border_width_left = 20
-border_width_top = 20
-border_width_right = 20
-border_width_bottom = 20
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_button"]
 bg_color = Color(0.3, 0.3, 0.35, 1)
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_right"]
 bg_color = Color(0.2, 0.25, 0.2, 0.9)
-border_width_left = 20
-border_width_top = 20
-border_width_right = 20
-border_width_bottom = 20
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 
 [sub_resource type="StyleBoxFlat" id="StyleBoxFlat_middle"]
 bg_color = Color(0.25, 0.2, 0.2, 0.9)
-border_width_left = 20
-border_width_top = 20
-border_width_right = 20
-border_width_bottom = 20
+border_width_left = 5
+border_width_top = 5
+border_width_right = 5
+border_width_bottom = 5
 
 [node name="PauseMenu" type="CanvasLayer" unique_id=224708675]
 layer = 10
@@ -46,7 +46,7 @@ layout_mode = 2
 [node name="ContentRow" type="HBoxContainer" parent="MainContainer" unique_id=1031107358]
 layout_mode = 2
 size_flags_vertical = 3
-theme_override_constants/separation = 30
+theme_override_constants/separation = 0
 
 [node name="LeftMargin" type="Control" parent="MainContainer/ContentRow" unique_id=982099064]
 custom_minimum_size = Vector2(30, 0)
