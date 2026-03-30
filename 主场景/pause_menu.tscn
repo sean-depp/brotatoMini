@@ -28,6 +28,14 @@ border_width_top = 5
 border_width_right = 5
 border_width_bottom = 5
 
+[sub_resource type="StyleBoxFlat" id="StyleBoxFlat_tooltip"]
+bg_color = Color(0.15, 0.15, 0.2, 0.95)
+border_width_left = 2
+border_width_top = 2
+border_width_right = 2
+border_width_bottom = 2
+border_color = Color(0.8, 0.7, 0.4, 1)
+
 [node name="PauseMenu" type="CanvasLayer" unique_id=224708675]
 layer = 10
 script = ExtResource("1_hax5v")
@@ -532,6 +540,46 @@ theme_override_font_sizes/font_size = 14
 horizontal_alignment = 2
 vertical_alignment = 1
 text = "0"
+
+[node name="TooltipPanel" type="PanelContainer" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot" unique_id=482652249]
+visible = false
+layout_mode = 1
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -100.0
+offset_top = -90.0
+offset_right = 100.0
+offset_bottom = -10.0
+grow_horizontal = 2
+theme_override_styles/panel = SubResource("StyleBoxFlat_tooltip")
+
+[node name="TooltipContent" type="VBoxContainer" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel" unique_id=482652250]
+layout_mode = 2
+
+[node name="TooltipName" type="Label" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel/TooltipContent" unique_id=482652251]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 18
+theme_override_colors/font_color = Color(1, 0.9, 0.4, 1)
+text = "拉面"
+horizontal_alignment = 1
+
+[node name="TooltipDesc" type="Label" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel/TooltipContent" unique_id=482652252]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 14
+theme_override_colors/font_color = Color(1, 1, 1, 1)
+text = "伤害+10%"
+horizontal_alignment = 1
+
+[node name="TooltipCount" type="Label" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel/TooltipContent" unique_id=482652253]
+layout_mode = 2
+theme_override_fonts/font = ExtResource("1_8nm0t")
+theme_override_font_sizes/font_size = 12
+theme_override_colors/font_color = Color(0.8, 0.8, 0.8, 1)
+text = "数量: 1"
+horizontal_alignment = 1
 
 [node name="BottomSpacer" type="Control" parent="MainContainer/ContentRow/MiddlePanel/MiddleContent" unique_id=1769975522]
 layout_mode = 2

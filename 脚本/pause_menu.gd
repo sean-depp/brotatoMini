@@ -8,6 +8,32 @@ const TREASURE_DEFINITIONS = {
 func _ready() -> void:
 	# 添加到 pause_menu 组，方便其他节点查找
 	add_to_group("pause_menu")
+	
+	# 设置宝物图标的鼠标事件
+	_setup_treasure_tooltip()
+
+# 设置宝物悬浮提示
+func _setup_treasure_tooltip() -> void:
+	var ramen_icon_slot = get_node_or_null("MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot")
+	if ramen_icon_slot:
+		# 启用鼠标事件
+		ramen_icon_slot.mouse_filter = Control.MOUSE_FILTER_STOP
+		
+		# 连接鼠标事件
+		ramen_icon_slot.mouse_entered.connect(_on_treasure_mouse_entered.bind("ramen"))
+		ramen_icon_slot.mouse_exited.connect(_on_treasure_mouse_exited)
+
+# 鼠标进入宝物图标
+func _on_treasure_mouse_entered(treasure_id: String) -> void:
+	var tooltip_panel = get_node_or_null("MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel")
+	if tooltip_panel:
+		tooltip_panel.visible = true
+
+# 鼠标离开宝物图标
+func _on_treasure_mouse_exited() -> void:
+	var tooltip_panel = get_node_or_null("MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel")
+	if tooltip_panel:
+		tooltip_panel.visible = false
 
 func update_value_labels() -> void:
 	var cur_scene = get_tree().get_current_scene()
@@ -457,13 +483,8 @@ func update_treasure_display(player: Node) -> void:
 			else:
 				count_label.visible = false
 		
-		# 更新工具提示
-		var treasure_info = player.get_treasure_info("ramen")
-		if not treasure_info.is_empty():
-			var tooltip_text = treasure_info.get("name", "拉面") + "\n" + treasure_info.get("description", "伤害+1")
-			if ramen_count > 1:
-				tooltip_text += "\n数量: %d (伤害+%d)" % [ramen_count, ramen_count]
-			ramen_icon_slot.tooltip_text = tooltip_text
+		# 更新悬浮面板内容
+		_update_tooltip_content("ramen", ramen_count, player)
 	
 	# 隐藏未使用的宝物槽
 	var slot1 = get_node_or_null("MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/TreasureSlot1")
@@ -472,3 +493,40 @@ func update_treasure_display(player: Node) -> void:
 		slot1.visible = false
 	if slot2:
 		slot2.visible = false
+
+# 更新悬浮面板内容
+func _update_tooltip_content(treasure_id: String, count: int, player: Node) -> void:
+	var tooltip_panel = get_node_or_null("MainContainer/ContentRow/MiddlePanel/MiddleContent/TreasureSection/TreasureGrid/RamenIconSlot/TooltipPanel")
+	if not tooltip_panel:
+		return
+	
+	var name_label = tooltip_panel.get_node_or_null("TooltipContent/TooltipName")
+	var desc_label = tooltip_panel.get_node_or_null("TooltipContent/TooltipDesc")
+	var count_label = tooltip_panel.get_node_or_null("TooltipContent/TooltipCount")
+	
+	var treasure_info = player.get_treasure_info(treasure_id)
+	if treasure_info.is_empty():
+		return
+	
+	# 更新名称
+	if name_label:
+		name_label.text = treasure_info.get("name", "宝物")
+	
+	# 更新描述
+	if desc_label:
+		var description = treasure_info.get("description", "")
+		# 如果有多个，显示总加成
+		if count > 1:
+			var damage_bonus = treasure_info.get("damage_bonus_percent", 0.0)
+			if damage_bonus > 0:
+				var total_bonus = damage_bonus * count * 100
+				description = "伤害+%d%%" % int(total_bonus)
+		desc_label.text = description
+	
+	# 更新数量
+	if count_label:
+		if count > 1:
+			count_label.text = "数量: %d" % count
+			count_label.visible = true
+		else:
+			count_label.visible = false
